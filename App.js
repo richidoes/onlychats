@@ -1,20 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { useColorScheme } from 'react-native';
+import { Amplify, Auth, Hub } from 'aws-amplify';
+import awsconfig from './src/aws-exports';
+import Root from './src/navigation/Root';
+import Splash from './src/screens/Splash';
+import AuthScreen from './src/screens/Auth';
+
+Amplify.configure(awsconfig);
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const colorScheme = useColorScheme();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  const listener = data => {
+    switch (data.payload.event) {
+      case 'signIn':
+        const { attributes } = data.payload.data;
+        setUser(attributes);
+        console.log("user signed in from Hub");
+        break;
+      case 'signOut':
+        setUser(null);
+        console.log("user signed out");
+        break;
+      default:
+        break;
+    }
+  }
+
+  Hub.listen("auth", listener);
+
+  if (isLoading) {
+    return <Splash setUser={setUser} setIsLoading={setIsLoading} />
+  }
+
+  return user ? <Root colorScheme={colorScheme} /> : <AuthScreen />;
+}
