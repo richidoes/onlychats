@@ -1,11 +1,11 @@
-import * as React from "react";
-import MyText from "./MyText";
-import { Button, ScrollView, View as NativeView } from "react-native";
 import { API, graphqlOperation } from "aws-amplify";
-import { listTodos } from "../graphql/queries";
-import { deleteTodo, updateTodo } from "../graphql/mutations";
+import * as React from "react";
+import { Button, ScrollView, View as DefaultView } from "react-native";
+import { View } from "../components/themed/Themed";
 import AddTodo from "./AddTodo";
-import { View } from "./themed/Themed";
+import { listTodos } from "../graphql/queries";
+import MyText from "./MyText";
+import { deleteTodo, updateTodo } from "../graphql/mutations";
 
 export default function ListTodos() {
   const [todos, setTodos] = React.useState([]);
@@ -18,67 +18,55 @@ export default function ListTodos() {
   }, []);
 
   const handleDeleteTodo = async (id) => {
-    await API.graphql(graphqlOperation(deleteTodo, { input: { id } }));
+    await API.graphql(
+      graphqlOperation(deleteTodo, {
+        input: { id },
+      })
+    );
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
     console.log("Todo deleted!");
   };
 
   const handleUpdateTodo = async (id, name) => {
-    await API.graphql(graphqlOperation(updateTodo, { input: { id, name } }));
+    await API.graphql(
+      graphqlOperation(updateTodo, {
+        input: { id, name },
+      })
+    );
     setTodos((prevTodos) =>
       prevTodos.map((todo) => (todo.id === id ? { ...todo, name } : todo))
     );
     console.log("Todo updated!");
   };
 
-  // commented because error
-
-  // React.useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const subscription = await API.graphql({
-  //         query: onCreateTodo,
-  //       }).subscribe({
-  //         next: (eventData) => {
-  //           console.log(eventData);
-  //           const newTodo = eventData.value.data.onCreateTodo;
-  //           setTodos([...todos, newTodo]);
-  //         },
-  //       });
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   })();
-  // }, []);
-
   return (
     <View style={{ flex: 1 }}>
       <AddTodo setTodos={setTodos} />
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 15 }}>
         <MyText type="title">Todos</MyText>
         {todos.map((todo) => (
-          <NativeView
+          <DefaultView
             key={todo.id}
             style={{
               flexDirection: "row",
-              alignItems: "center",
               justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <MyText>{todo.name}</MyText>
-            <NativeView
+            <DefaultView
               style={{
                 flexDirection: "row",
               }}
             >
-              <Button title="Edit" onPress={() => {}} />
+              <Button title="update" />
               <Button
-                title="Delete"
+                title="delete"
                 color={"red"}
                 onPress={() => handleDeleteTodo(todo.id)}
               />
-            </NativeView>
-          </NativeView>
+            </DefaultView>
+          </DefaultView>
         ))}
       </ScrollView>
     </View>

@@ -2,9 +2,8 @@ import * as React from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createTodo } from "../graphql/mutations";
 import { Button } from "react-native";
-import MyInput from "./MyInput";
 import { View } from "./themed/Themed";
-import MyText from "./MyText";
+import MyInput from "./MyInput";
 
 export default function AddTodo({ setTodos }) {
   const [name, setName] = React.useState("");
@@ -19,9 +18,7 @@ export default function AddTodo({ setTodos }) {
     );
     setName("");
     setTodos((prevTodos) => [...prevTodos, data.createTodo]);
-    console.log("Todo created!");
   };
-
   return (
     <View
       style={{
@@ -30,7 +27,7 @@ export default function AddTodo({ setTodos }) {
         alignSelf: "center",
       }}
     >
-      <MyInput label={"Create todo"} onChangeText={setName} value={name} />
+      <MyInput label={"Create Todo"} value={name} onChangeText={setName} />
       <Button title="Add" onPress={handleSubmit} />
     </View>
   );

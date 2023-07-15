@@ -13,11 +13,11 @@ export default function MyText({ children, type = "body", style }) {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 34,
+    fontSize: 32,
     fontWeight: "bold",
   },
   body: {
-    fontSize: 17,
+    fontSize: 18,
   },
   caption: {
     fontSize: 14,

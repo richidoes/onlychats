@@ -2,14 +2,14 @@ import * as React from "react";
 import { Auth } from "aws-amplify";
 
 const AuthContext = React.createContext({
-  authState: "signIn",
+  authState: "default",
   setAuthState: () => {},
   email: "",
   setEmail: () => {},
   password: "",
   setPassword: () => {},
-  setVerificationCode: () => {},
   verificationCode: "",
+  setVerificationCode: () => {},
   isLoading: false,
   handleSignIn: () => {},
   handleSignUp: () => {},
@@ -19,7 +19,7 @@ const AuthContext = React.createContext({
 const { Provider } = AuthContext;
 
 function AuthProvider({ children }) {
-  const [authState, setAuthState] = React.useState("signIn");
+  const [authState, setAuthState] = React.useState("default");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [verificationCode, setVerificationCode] = React.useState("");
@@ -27,7 +27,7 @@ function AuthProvider({ children }) {
 
   async function handleSignIn() {
     if (!email || !password) {
-      alert("Please enter an email and password");
+      alert("please enter an email and password");
       return;
     }
     try {
@@ -36,12 +36,12 @@ function AuthProvider({ children }) {
         username: email,
         password,
       });
-      console.log("user", user);
+      console.log("user signed In");
       setAuthState("signedIn");
-    } catch (error) {
-      alert(error.message);
+    } catch (e) {
+      alert(e.message);
       setIsLoading(false);
-      console.log(error);
+      console.log(e);
     }
   }
 

@@ -1,6 +1,12 @@
-import { TextInput, Text, StyleSheet, useColorScheme } from "react-native";
+import {
+  TextInput,
+  Text,
+  View,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
+import MyText from "../components/MyText";
 import Colors from "../../constants/colors";
-import { View } from "./themed/Themed";
 
 export default function MyInput({
   label,
@@ -9,14 +15,14 @@ export default function MyInput({
   secureTextEntry,
 }) {
   const theme = useColorScheme();
-
   return (
-    <View
-      style={[styles.container, theme === "dark" ? styles.dark : styles.light]}
-    >
+    <View style={styles.container}>
+      <MyText style={{ fontWeight: "bold", marginBottom: 5 }} type={"caption"}>
+        {label}
+      </MyText>
       <TextInput
         placeholder={label}
-        style={styles.input}
+        style={[styles.input, styles[theme]]}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
@@ -27,24 +33,24 @@ export default function MyInput({
 
 const styles = StyleSheet.create({
   container: {
+    marginBottom: 20,
+  },
+  input: {
     width: "100%",
-    height: 45,
+    height: 50,
     justifyContent: "center",
-    marginVertical: 10,
-    padding: 10,
+    paddingLeft: 10,
     borderRadius: 8,
     borderWidth: 1,
   },
   dark: {
     backgroundColor: Colors.dark.text + "06",
-    borderColor: Colors.dark.text + "60",
+    borderColor: Colors.dark.text + "80",
+    color: Colors.dark.text,
   },
   light: {
     backgroundColor: Colors.light.text + "06",
-    borderColor: Colors.light.text + "60",
-  },
-  input: {
-    color: "gray",
-    fontSize: 17,
+    borderColor: Colors.light.text + "80",
+    color: Colors.light.text,
   },
 });

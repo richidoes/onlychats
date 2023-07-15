@@ -25,6 +25,13 @@
       { "ignore": ["navigation", "navigation.navigate"] }
     ],
 
-    "react-hooks/exhaustive-deps": 0
+    "react-hooks/exhaustive-deps": 0,
+
+    "react/react-in-jsx-scope": 0,
+
+    "react/jsx-props-no-spreading": 0,
+
+    "global-require": "off",
+    "no-nested-ternary": "off"
   }
 }

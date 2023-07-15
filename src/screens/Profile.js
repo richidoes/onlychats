@@ -1,7 +1,7 @@
+import { Auth } from "aws-amplify";
 import * as React from "react";
 import MyText from "../components/MyText";
 import MyButton from "../components/MyButton";
-import { Auth } from "aws-amplify";
 import { View } from "../components/themed/Themed";
 
 export default function Profile() {

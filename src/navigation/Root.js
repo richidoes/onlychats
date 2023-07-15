@@ -1,4 +1,3 @@
-import { FontAwesome } from "@expo/vector-icons";
 import * as React from "react";
 import {
   DarkTheme,
@@ -13,37 +12,28 @@ import Profile from "../screens/Profile";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// customizing the theme
+// const myTheme = {
+//   ...DefaultTheme,
+//   colors: {
+//     ...DefaultTheme.colors,
+//     primary: "red",
+//     background: "red",
+//     card: "lightblue",
+//     text: "black",
+//     border: "red",
+//   },
+// };
+
 export default function Root({ colorScheme }) {
   return (
     <NavigationContainer
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <BottomNavigator />
+      <Tab.Navigator initialRouteName="Home">
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Profile" component={Profile} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
-}
-
-function BottomNavigator() {
-  return (
-    <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
-
-function TabBarIcon(props) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }

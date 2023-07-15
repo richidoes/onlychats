@@ -10,11 +10,24 @@ export default function SignUp() {
     React.useContext(AuthContext);
   return (
     <React.Fragment>
-      <MyText type="title">Sign Up</MyText>
+      <MyText type="title" style={{ marginBottom: 35 }}>
+        Join the amazing community
+      </MyText>
+      <MyInput label="First Name" />
+      <MyInput label="Last Name" />
       <MyInput label="Email" onChangeText={setEmail} />
       <MyInput label="Password" onChangeText={setPassword} secureTextEntry />
-      <MyButton title="Sign Up" onPress={handleSignUp} />
-      <Button title="Sign In" onPress={() => setAuthState("signIn")} />
+      <MyInput
+        label="Confirm Password"
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <MyButton title="Join Me" onPress={handleSignUp} />
+      <MyButton
+        title="Go Back"
+        type="secondary"
+        onPress={() => setAuthState("signIn")}
+      />
     </React.Fragment>
   );
 }
