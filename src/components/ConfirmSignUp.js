@@ -12,6 +12,7 @@ export default function ConfirmSignUp() {
     setVerificationCode,
     handleConfirmSignUp,
     setAuthState,
+    handleResendVerificationCode,
   } = React.useContext(AuthContext);
   return (
     <React.Fragment>
@@ -25,7 +26,11 @@ export default function ConfirmSignUp() {
       <MyInput label="Email" value={email} onChangeText={setEmail} />
       <MyInput label="Code" onChangeText={setVerificationCode} />
       <MyButton title="Create Account" onPress={handleConfirmSignUp} />
-      <MyButton title="Re-send Code" type={"secondary"} />
+      <MyButton
+        title="Re-send Code"
+        type={"secondary"}
+        onPress={handleResendVerificationCode}
+      />
       <MyButton
         title="Back to Login"
         type={"secondary"}

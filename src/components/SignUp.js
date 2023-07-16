@@ -6,20 +6,27 @@ import { Button } from "react-native";
 import { AuthContext } from "../Context/AuthContext";
 
 export default function SignUp() {
-  const { setAuthState, setEmail, setPassword, handleSignUp } =
-    React.useContext(AuthContext);
+  const {
+    setAuthState,
+    setEmail,
+    setPassword,
+    handleSignUp,
+    setFirstName,
+    setLastName,
+    setConfirmPassword,
+  } = React.useContext(AuthContext);
   return (
     <React.Fragment>
       <MyText type="title" style={{ marginBottom: 35 }}>
         Join the amazing community
       </MyText>
-      <MyInput label="First Name" />
-      <MyInput label="Last Name" />
+      <MyInput label="First Name" onChangeText={setFirstName} />
+      <MyInput label="Last Name" onChangeText={setLastName} />
       <MyInput label="Email" onChangeText={setEmail} />
       <MyInput label="Password" onChangeText={setPassword} secureTextEntry />
       <MyInput
         label="Confirm Password"
-        onChangeText={setPassword}
+        onChangeText={setConfirmPassword}
         secureTextEntry
       />
       <MyButton title="Join Me" onPress={handleSignUp} />
