@@ -1,5 +1,8 @@
 import * as React from "react";
-import { Auth } from "aws-amplify";
+import { Auth, API, graphqlOperation } from "aws-amplify";
+import { createUser } from "../graphql/mutations";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/user";
 
 const AuthContext = React.createContext({
   authState: "default",
@@ -36,6 +39,7 @@ function AuthProvider({ children }) {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const dispatch = useDispatch();
 
   async function handleSignIn() {
     if (!email || !password) {
@@ -94,8 +98,12 @@ function AuthProvider({ children }) {
     try {
       setIsLoading(true);
       await Auth.confirmSignUp(email, verificationCode);
-      alert("Confirmed", "You can now sign in.");
-      setAuthState("signIn");
+      const user = await Auth.signIn({
+        username: email,
+        password,
+      });
+      await saveUserToDatabase(user);
+      alert("Welcome, account created succesfully");
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -147,6 +155,30 @@ function AuthProvider({ children }) {
       alert(`Successfully resent confirmation code to ${email}`);
     } catch (e) {
       alert(e);
+    }
+  }
+
+  async function saveUserToDatabase(user) {
+    const { attributes } = user;
+    const userToSave = {
+      id: attributes.sub,
+      firstName: attributes.given_name,
+      lastName: attributes.family_name,
+      profilePicture: null,
+      email: attributes.email.toLowerCase(),
+      status: null,
+      notificationToken: null,
+    };
+    try {
+      const userFromDB = await API.graphql(
+        graphqlOperation(createUser, {
+          input: userToSave,
+        })
+      );
+      dispatch(setUser(userToSave));
+      console.log("user saved to DB and Redux", userFromDB);
+    } catch (e) {
+      console.log("error saving user", e);
     }
   }
   return (
