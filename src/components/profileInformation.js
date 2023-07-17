@@ -1,0 +1,98 @@
+import * as React from "react";
+import { View, useColorScheme, StyleSheet, TextInput } from "react-native";
+import MyText from "./MyText";
+import Colors from "../../constants/colors";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  updateUserFirstName,
+  updateUserLastName,
+  updateUserStatus,
+} from "../utils/userOperations";
+import { resetFirstName, resetlastName, resetStatus } from "../features/user";
+
+export default function ProfileInformation() {
+  const user = useSelector((state) => state.user);
+  const theme = useColorScheme();
+  return (
+    <View>
+      <MyText
+        type="caption"
+        style={{ fontWeight: "600", color: Colors[theme].text + "40" }}
+      >
+        INFORMATION
+      </MyText>
+      <InfoField
+        theme={theme}
+        label={"First Name"}
+        canEdit
+        value={user.firstName}
+        handleUpdate={updateUserFirstName}
+        handleRedux={resetFirstName}
+      />
+      <InfoField
+        label={"Last Name"}
+        value={user.lastName}
+        theme={theme}
+        canEdit
+        handleUpdate={updateUserLastName}
+        handleRedux={resetlastName}
+      />
+      <InfoField label={"Email"} value={user.email} theme={theme} />
+      <InfoField
+        label={"Status"}
+        value={user.status}
+        theme={theme}
+        canEdit
+        handleUpdate={updateUserStatus}
+        handleRedux={resetStatus}
+      />
+    </View>
+  );
+}
+
+function InfoField({
+  label,
+  value,
+  theme,
+  canEdit,
+  handleUpdate,
+  handleRedux,
+}) {
+  const { id } = useSelector((state) => state.user);
+  const [localValue, setLocalValue] = React.useState(value);
+  const dispatch = useDispatch();
+  return (
+    <View style={styles.fieldContainer}>
+      <MyText
+        type="caption"
+        style={{
+          fontWeight: "500",
+          color: Colors[theme].text + "80",
+          paddingRight: 10,
+        }}
+      >
+        {label}
+      </MyText>
+      <TextInput
+        placeholder={label}
+        value={localValue}
+        onChangeText={canEdit && setLocalValue}
+        keyboardType={canEdit ? "web-search" : "default"}
+        onSubmitEditing={(event) => {
+          canEdit && handleUpdate(id, event.nativeEvent.text);
+          canEdit && dispatch(handleRedux(event.nativeEvent.text));
+        }}
+        style={{ fontWeight: "500", color: Colors[theme].text, flexShrink: 1 }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  fieldContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingVertical: 15,
+  },
+});

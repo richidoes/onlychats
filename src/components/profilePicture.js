@@ -4,9 +4,8 @@ import MyText from "../components/MyText";
 import { useSelector, useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { CLOUD_NAME, UPLOAD_PRESET } from "@env";
-import { API } from "aws-amplify";
-import { updateUser } from "../graphql/mutations";
 import { resetProfilePicture } from "../features/user";
+import { updateUserPicture } from "../utils/userOperations";
 
 function ProfileFallback({ firstName }) {
   return (
@@ -49,7 +48,7 @@ export default function ProfilePicture() {
       });
       const json = await response.json();
       // save to db
-      updateUserPicture(json.url);
+      await updateUserPicture(id, json.url);
       // set image to redux
       dispatch(resetProfilePicture(json.url));
       console.log("image save to db and cloudinary", json.url);
@@ -58,21 +57,21 @@ export default function ProfilePicture() {
     }
   };
 
-  const updateUserPicture = async (newPhoto) => {
-    try {
-      await API.graphql({
-        query: updateUser,
-        variables: {
-          input: {
-            id: id,
-            profilePicture: newPhoto,
-          },
-        },
-      });
-    } catch (e) {
-      console.log("error updating user photo");
-    }
-  };
+  // const updateUserPicture = async (newPhoto) => {
+  //   try {
+  //     await API.graphql({
+  //       query: updateUser,
+  //       variables: {
+  //         input: {
+  //           id: id,
+  //           profilePicture: newPhoto,
+  //         },
+  //       },
+  //     });
+  //   } catch (e) {
+  //     console.log("error updating user photo");
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -99,13 +98,13 @@ const styles = StyleSheet.create({
     backgroundColor: "lightcoral",
     width: 100,
     height: 100,
-    borderRadius: "50%",
+    borderRadius: 50,
     marginBottom: 6,
   },
   image: {
     width: 100,
     height: 100,
-    borderRadius: "50%",
+    borderRadius: 50,
     marginBottom: 6,
   },
   initialLetter: {
