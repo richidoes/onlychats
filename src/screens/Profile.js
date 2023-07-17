@@ -4,9 +4,12 @@ import MyText from "../components/MyText";
 import MyButton from "../components/MyButton";
 import { View } from "../components/themed/Themed";
 import { useSelector } from "react-redux";
+import ProfilePicture from "../components/profilePicture";
+import { useColorScheme, StatusBar } from "react-native";
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
+  const theme = useColorScheme();
 
   async function handleSignOut() {
     try {
@@ -19,12 +22,10 @@ export default function Profile() {
 
   return (
     <View style={{ flex: 1 }}>
-      <MyText type="title">Welcome back! 🚀</MyText>
-      <MyText>{user.id}</MyText>
-      <MyText>{user.email}</MyText>
-      <MyText>{user.firstName}</MyText>
-      <MyText>{user.lastName}</MyText>
-      <MyButton title={"Sign Out"} onPress={handleSignOut} />
+      <ProfilePicture />
+      <StatusBar
+        barStyle={theme === "dark" ? "light-content" : "dark-content"}
+      />
     </View>
   );
 }

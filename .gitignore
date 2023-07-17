@@ -20,6 +20,7 @@ amplifytools.xcconfig
 #amplify-do-not-edit-end
 
 node_modules/
+.env
 
 amplify/
 
