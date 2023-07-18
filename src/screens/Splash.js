@@ -25,6 +25,8 @@ export default function Splash({ setIsLoading }) {
             email: attributes.email.toLowerCase(),
             status: data.getUser.status,
             notificationToken: data.getUser.notificationToken,
+            latitude: data.getUser.latitude,
+            longitude: data.getUser.longitude,
           })
         );
         setIsLoading(false);
