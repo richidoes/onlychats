@@ -14,7 +14,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -22,7 +24,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,6 +39,12 @@
           "photosPermission": "Only Chats uses the accesses to your photos to do things like help you set your profile picture"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b93e44a2-6efa-490a-89a5-4b49c904128d"
+      }
+    },
+    "owner": "richidoes"
   }
 }
