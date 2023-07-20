@@ -1,16 +1,88 @@
 import * as React from "react";
-import { Image, StyleSheet, useColorScheme, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  useColorScheme,
+  View,
+  Linking,
+  Alert,
+  Pressable,
+} from "react-native";
 import MyText from "./MyText";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import Colors from "../../constants/colors";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
+import {
+  incrementLikesReducer,
+  decrementLikesReducer,
+  deletePostReducer,
+} from "../features/posts";
+import {
+  deletePost,
+  incrementLikesMutation,
+  decrementLikesMutation,
+} from "../utils/postsOperations";
+import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
 
 export default function PostCard(post) {
   const user = useSelector((state) => state.user);
   const theme = useColorScheme();
+  const dispatch = useDispatch();
   const { author, content, createdAt, id, likedBy, numberOfLikes } = post;
+
+  async function handleLike() {
+    const data = {
+      userID: user.id,
+      postID: id,
+    };
+
+    if (likedBy.includes(user.id)) {
+      notificationAsync(NotificationFeedbackType.Error);
+      dispatch(decrementLikesReducer(data));
+      await decrementLikesMutation(id, likedBy, numberOfLikes, user.id);
+    } else {
+      // increment likes
+      notificationAsync(NotificationFeedbackType.Success);
+      dispatch(incrementLikesReducer(data));
+      await incrementLikesMutation(id, likedBy, numberOfLikes, user.id);
+    }
+  }
+
+  function handleReport() {
+    Alert.alert("Report User", "Would you like to report this post or user?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("canceled"),
+        style: "cancel",
+      },
+      {
+        text: "Resport Post or User",
+        onPress: async () => {
+          dispatch(deletePostReducer(id));
+          await sendReportEmail();
+          await deletePost(id);
+        },
+        style: "destructive",
+      },
+    ]);
+  }
+
+  async function sendReportEmail() {
+    const url = `mailto:${"codewithbeto.dev@gmail.com"}?subject=Report&body=${
+      "This is an automatic email to the Code With Beto Reporting team. Please write any concerns above this paragraph and do not delete anything below. " +
+      "User ID: " +
+      user.id +
+      "\n" +
+      "Post ID: " +
+      id
+    }`;
+
+    await Linking.openURL(url);
+    alert("Thank you for your report. We will review it as soon as possible.");
+  }
+
   return (
     <View
       style={[
@@ -25,7 +97,7 @@ export default function PostCard(post) {
               source={{
                 uri: author?.profilePicture
                   ? author.profilePicture
-                  : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                  : "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
               }}
               style={styles.image}
             />
@@ -43,6 +115,7 @@ export default function PostCard(post) {
             name="ellipsis-horizontal"
             size={24}
             color={Colors[theme].text + "70"}
+            onPress={handleReport}
           />
         </View>
         <MyText
@@ -51,19 +124,21 @@ export default function PostCard(post) {
           {content}
         </MyText>
         <View style={{ flexDirection: "row", alignItems: "baseline" }}>
-          {likedBy !== null && likedBy.includes(user.id) ? (
-            <AntDesign
-              name="like1"
-              size={21}
-              color={Colors.light.tabIconSelected}
-            />
-          ) : (
-            <AntDesign
-              name="like2"
-              size={21}
-              color={Colors[theme].text + "50"}
-            />
-          )}
+          <Pressable onPress={handleLike}>
+            {likedBy !== null && likedBy.includes(user.id) ? (
+              <AntDesign
+                name="like1"
+                size={21}
+                color={Colors.light.tabIconSelected}
+              />
+            ) : (
+              <AntDesign
+                name="like2"
+                size={21}
+                color={Colors[theme].text + "50"}
+              />
+            )}
+          </Pressable>
           <MyText
             type="caption"
             style={[

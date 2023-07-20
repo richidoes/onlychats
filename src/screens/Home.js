@@ -87,6 +87,8 @@ export default function Home() {
             disabled={isLoading || nextToken === null}
           />
         )}
+        refreshing={isLoading}
+        onRefresh={fetchPost}
       />
     </View>
   );
