@@ -11,6 +11,7 @@ import Profile from "../screens/Profile";
 import Onboarding from "../screens/Onboarding";
 import { Ionicons } from "@expo/vector-icons";
 import Chats from "../screens/Chats";
+import NewPost from "../screens/NewPost";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -65,7 +66,11 @@ function BottomNavigation() {
 function HomeStack() {
   return (
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Onboarding"
         component={Onboarding}
@@ -73,6 +78,11 @@ function HomeStack() {
           headerShown: false,
           presentation: "fullScreenModal",
         }}
+      />
+      <Stack.Screen
+        name="NewPost"
+        component={NewPost}
+        options={{ presentation: "modal" }}
       />
     </Stack.Navigator>
   );
