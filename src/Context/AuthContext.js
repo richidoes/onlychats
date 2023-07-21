@@ -3,6 +3,8 @@ import { Auth, API, graphqlOperation } from "aws-amplify";
 import { createUser } from "../graphql/mutations";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/user";
+import { getUser } from "../graphql/queries";
+import { setChatRooms } from "../features/chatRooms";
 
 const AuthContext = React.createContext({
   authState: "default",
@@ -52,6 +54,25 @@ function AuthProvider({ children }) {
         username: email,
         password,
       });
+      const userFromDB = await API.graphql(
+        graphqlOperation(getUser, { id: user.attributes.sub })
+      );
+      dispatch(
+        setUser({
+          id: userFromDB.data.getUser.id,
+          firstName: userFromDB.data.getUser.firstName,
+          lastName: userFromDB.data.getUser.lastName,
+          profilePicture: userFromDB.data.getUser.profilePicture,
+          email: userFromDB.data.getUser.email.toLowerCase(),
+          status: userFromDB.data.getUser.status,
+          notificationToken: userFromDB.data.getUser.notificationToken,
+          latitude: userFromDB.data.getUser.latitude,
+          longitude: userFromDB.data.getUser.longitude,
+        })
+      );
+      if (userFromDB.data.getUser.chatRooms.items !== null) {
+        dispatch(setChatRooms(userFromDB.data.getUser.chatRooms.items));
+      }
       setIsLoading(false);
       console.log("user signed In");
       setAuthState("signedIn");

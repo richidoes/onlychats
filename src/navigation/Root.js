@@ -47,6 +47,7 @@ function BottomNavigation() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="md-chatbubbles" color={color} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
