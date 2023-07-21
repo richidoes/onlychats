@@ -12,6 +12,7 @@ import Onboarding from "../screens/Onboarding";
 import { Ionicons } from "@expo/vector-icons";
 import Chats from "../screens/Chats";
 import NewPost from "../screens/NewPost";
+import ChatRoom from "../screens/ChatRoom";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,13 +42,14 @@ function BottomNavigation() {
         }}
       />
       <Tab.Screen
-        name="Chats"
-        component={Chats}
+        name="ChatsStack"
+        component={ChatsStack}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="md-chatbubbles" color={color} />
           ),
           headerShown: false,
+          tabBarLabel: "Chats",
         }}
       />
       <Tab.Screen
@@ -85,6 +87,19 @@ function HomeStack() {
         component={NewPost}
         options={{ presentation: "modal" }}
       />
+    </Stack.Navigator>
+  );
+}
+
+function ChatsStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Chats"
+        component={Chats}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
     </Stack.Navigator>
   );
 }

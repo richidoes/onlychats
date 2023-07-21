@@ -17,6 +17,8 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorLight,
     red: "#EF4444",
+    messageFrom: "#0171F4",
+    messageTo: "#54A0FA",
   },
   dark: {
     text: "#F2F2F4",
@@ -25,5 +27,7 @@ export default {
     tabIconDefault: "#ccc",
     tabIconSelected: tintColorDark,
     red: "#EF4444",
+    messageFrom: "#8638D1",
+    messageTo: "#B96FFE",
   },
 };
