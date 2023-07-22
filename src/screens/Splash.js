@@ -1,11 +1,13 @@
 import * as React from "react";
-import { View } from "react-native";
+import { View } from "../components/themed/Themed";
 import MyText from "../components/MyText";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/user";
 import { setChatRooms } from "../features/chatRooms";
 import { getUser } from "../graphql/queries";
+import { getNotificationsByUserID } from "../utils/notifications";
+import { setNotifications } from "../features/notifications";
 
 export default function Splash({ setIsLoading }) {
   const dispatch = useDispatch();
@@ -16,7 +18,11 @@ export default function Splash({ setIsLoading }) {
         const { data } = await API.graphql(
           graphqlOperation(getUser, { id: attributes.sub })
         );
-        console.log(data);
+        const { notificationsList } = await getNotificationsByUserID(
+          attributes.sub
+        );
+        if (notificationsList) dispatch(setNotifications(notificationsList));
+        // console.log(data);
         dispatch(
           setUser({
             id: attributes.sub,

@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  Button,
   KeyboardAvoidingView,
   Platform,
   useColorScheme,
@@ -30,6 +31,8 @@ export default function ChatRoom() {
   const theme = useColorScheme();
   const [messages, setMessages] = React.useState([]);
   const phoneHeight = useWindowDimensions();
+  const [nextToken, setNextToken] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
     fetchMessages();
@@ -55,6 +58,7 @@ export default function ChatRoom() {
 
   async function fetchMessages() {
     try {
+      setIsLoading(true);
       const { data } = await API.graphql(
         graphqlOperation(messagesByChatRoom, {
           chatRoomID: chatRoomID,
@@ -62,9 +66,36 @@ export default function ChatRoom() {
           sortDirection: "DESC",
         })
       );
+      setNextToken(data.messagesByChatRoom.nextToken);
       setMessages(data.messagesByChatRoom.items);
+      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       console.log;
+    }
+  }
+
+  async function fetchMoreMessages() {
+    if (nextToken === null) {
+      alert("no more messages to load");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const { data } = await API.graphql(
+        graphqlOperation(messagesByChatRoom, {
+          chatRoomID: chatRoomID,
+          limit: 100,
+          sortDirection: "DESC",
+          nextToken: nextToken,
+        })
+      );
+      setMessages([...messages, ...data.messagesByChatRoom.items]);
+      setNextToken(data.messagesByChatRoom.nextToken);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
     }
   }
 
@@ -104,6 +135,13 @@ export default function ChatRoom() {
         renderItem={({ item }) => <ChatMessage message={item} />}
         estimatedItemSize={200}
         inverted
+        ListFooterComponent={
+          <Button
+            title={isLoading ? "loading" : "load more messages"}
+            disabled={isLoading || nextToken === null}
+            onPress={fetchMoreMessages}
+          />
+        }
       />
       <ChatInput
         chatRoomID={chatRoomID}

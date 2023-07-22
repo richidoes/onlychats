@@ -10,6 +10,8 @@ import {
   StyleSheet,
   useColorScheme,
   View,
+  Linking,
+  Alert,
 } from "react-native";
 import { ScrollView } from "../components/themed/Themed";
 import MapView, { Marker } from "react-native-maps";
@@ -31,6 +33,33 @@ export default function ContactProfile() {
     );
     setContact(data.getUser);
   }
+
+  function handleReport() {
+    Alert.alert("Report User", "Would you like to report this user?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("canceled"),
+        style: "cancel",
+      },
+      {
+        text: "Report User",
+        onPress: async () => {
+          await sendReportEmail();
+        },
+        style: "destructive",
+      },
+    ]);
+  }
+
+  const sendReportEmail = async () => {
+    const url = `mailto:${"codewithbeto.dev@gmail.com"}?subject=Report&body=${
+      "This is an automatic email to the Code With Beto Reporting team. Please write any concerns above this paragraph and do not delete anything below. " +
+      "User ID: " +
+      contact.id
+    }`;
+    await Linking.openURL(url);
+    alert("Thank you for your report. We will review it as soon as possible.");
+  };
 
   if (contact === undefined || contact === null) return;
 
@@ -112,15 +141,15 @@ export default function ContactProfile() {
       <InfoField
         label={"Report Contact"}
         theme={theme}
-        onPress={() => alert("Report Contact")}
+        onPress={handleReport}
         danger
       />
-      <InfoField
+      {/* <InfoField
         label={"Delete Conversation"}
         theme={theme}
         onPress={() => alert("Delete Conversation")}
         danger
-      />
+      /> */}
     </ScrollView>
   );
 }

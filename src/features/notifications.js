@@ -20,10 +20,22 @@ export const notificationsSlice = createSlice({
     loadMoreNotifications: (state, action) => {
       state.notifications = [...state.notifications, ...action.payload];
     },
+    markNotificationAsSeen: (state, action) => {
+      state.notifications = state.notifications.map((notification) => {
+        if (notification.id === action.payload) {
+          notification.isSeen = true;
+        }
+        return notification;
+      });
+    },
   },
 });
 
-export const { setNotifications, deleteNotification, loadMoreNotifications } =
-  notificationsSlice.actions;
+export const {
+  setNotifications,
+  markNotificationAsSeen,
+  deleteNotification,
+  loadMoreNotifications,
+} = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

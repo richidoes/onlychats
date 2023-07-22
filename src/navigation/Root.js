@@ -34,7 +34,9 @@ export default function Root({ colorScheme }) {
 
 function BottomNavigation() {
   const { notifications } = useSelector((state) => state.notifications);
-  const unSeenNotifications = notifications.map((not) => not.isSeen === false);
+  const unSeenNotifications = notifications.filter(
+    (not) => not.isSeen === false
+  );
   return (
     <Tab.Navigator initialRouteName="Home">
       <Tab.Screen
@@ -68,7 +70,10 @@ function BottomNavigation() {
           ),
           headerShown: false,
           tabBarLabel: "Notifications",
-          tabBarBadge: unSeenNotifications.length,
+          tabBarBadge:
+            unSeenNotifications.length === 0
+              ? null
+              : unSeenNotifications.length,
         }}
       />
       <Tab.Screen

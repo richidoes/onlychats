@@ -14,8 +14,11 @@ import Colors from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { API } from "aws-amplify";
-import { deleteNotification } from "../graphql/mutations";
-import { deleteNotification as deleteNotificationReducer } from "../features/notifications";
+import { deleteNotification, updateNotification } from "../graphql/mutations";
+import {
+  deleteNotification as deleteNotificationReducer,
+  markNotificationAsSeen,
+} from "../features/notifications";
 
 export default function NotificationCard(notification) {
   const user = useSelector((state) => state.user);
@@ -56,20 +59,35 @@ export default function NotificationCard(notification) {
     );
   }
 
+  async function handleOnPress() {
+    if (!notification.isSeen) {
+      await API.graphql({
+        query: updateNotification,
+        variables: {
+          input: {
+            id: notification.id,
+            notificationSenderId: sender.id,
+            isSeen: true,
+          },
+        },
+      });
+    }
+    dispatch(markNotificationAsSeen(notification.id));
+    notification.type === "LIKED_POST"
+      ? navigation.navigate("ShowPost", { postID: notification.postID })
+      : navigation.navigate("ChatRoom", {
+          chatRoomID: notification.chatRoomID,
+          contactInfo: sender,
+        });
+  }
+
   return (
     <Pressable
       style={[
         styles.container,
         { borderBottomColor: Colors[theme].text + "60" },
       ]}
-      onPress={() => {
-        notification.type === "LIKED_POST"
-          ? navigation.navigate("ShowPost", { postID: notification.postID })
-          : navigation.navigate("ChatRoom", {
-              chatRoomID: notification.chatRoomID,
-              contactInfo: sender,
-            });
-      }}
+      onPress={handleOnPress}
     >
       <View style={styles.containerWithPadding}>
         <View
