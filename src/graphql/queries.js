@@ -31,6 +31,7 @@ export const getUser = /* GraphQL */ `
                   firstName
                   lastName
                   profilePicture
+                  notificationToken
                   __typename
                 }
                 __typename

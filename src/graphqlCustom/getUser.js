@@ -13,10 +13,11 @@ export const getUser = /* GraphQL */ `
       chatRooms {
         items {
           id
-          userID
-          chatRoomID
+          userId
+          chatRoomId
           createdAt
           updatedAt
+          __typename
           chatRoom {
             id
             isSeenBy
@@ -27,19 +28,26 @@ export const getUser = /* GraphQL */ `
                   firstName
                   lastName
                   profilePicture
+                  notificationToken
+                  __typename
                 }
+                __typename
               }
             }
             lastMessage {
               content
               createdAt
+              __typename
             }
+            __typename
           }
         }
         nextToken
+        __typename
       }
       createdAt
       updatedAt
+      __typename
     }
   }
 `;

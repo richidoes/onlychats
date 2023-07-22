@@ -377,8 +377,8 @@ export const onDeletePost = /* GraphQL */ `
   }
 `;
 export const onCreateMessage = /* GraphQL */ `
-  subscription OnCreateMessage($filter: ModelSubscriptionMessageFilterInput) {
-    onCreateMessage(filter: $filter) {
+  subscription OnCreateMessage {
+    onCreateMessage {
       id
       chatRoomID
       author {

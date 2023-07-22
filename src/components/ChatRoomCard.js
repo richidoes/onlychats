@@ -28,12 +28,14 @@ export default function ChatRoomCard(chat) {
           firstName: participants.items[1].user.firstName,
           lastName: participants.items[1].user.lastName,
           profilePicture: participants.items[1].user.profilePicture,
+          notificationToken: participants.items[1].user.notificationToken,
         }
       : {
           id: participants.items[0].user.id,
           firstName: participants.items[0].user.firstName,
           lastName: participants.items[0].user.lastName,
           profilePicture: participants.items[0].user.profilePicture,
+          notificationToken: participants.items[0].user.notificationToken,
         };
   const isSeenByCurrentUser = isSeenBy !== null && isSeenBy.includes(user.id);
   return (

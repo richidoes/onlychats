@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Chats from "../screens/Chats";
 import NewPost from "../screens/NewPost";
 import ChatRoom from "../screens/ChatRoom";
+import ContactProfile from "../screens/ContactProfile";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -100,6 +101,11 @@ function ChatsStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="ChatRoom" component={ChatRoom} />
+      <Stack.Screen
+        name="ContactProfile"
+        component={ContactProfile}
+        options={{ presentation: "modal", headerTitle: "Contact Info" }}
+      />
     </Stack.Navigator>
   );
 }

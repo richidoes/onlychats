@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import MyText from "./MyText";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ChatRoomHeader({
   id,
@@ -8,8 +9,12 @@ export default function ChatRoomHeader({
   lastName,
   profilePicture,
 }) {
+  const navigation = useNavigation();
   return (
-    <Pressable style={styles.container} onPress={() => alert("hello")}>
+    <Pressable
+      onPress={() => navigation.navigate("ContactProfile", { id })}
+      style={styles.container}
+    >
       <Image
         source={{
           uri: profilePicture
