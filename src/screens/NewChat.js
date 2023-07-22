@@ -12,7 +12,10 @@ import {
   createNewChatRoom,
   getUserByID,
 } from "../utils/userOperations";
-import { sendPushNotification } from "../utils/notifications";
+import {
+  sendPushNotification,
+  createNotificationOnDB,
+} from "../utils/notifications";
 import { useNavigation } from "@react-navigation/native";
 
 export default function NewChat() {
@@ -57,12 +60,20 @@ export default function NewChat() {
       if (refreshedUser.chatRooms !== undefined) {
         dispatch(setChatRooms(refreshedUser.chatRooms.items));
       }
+      const notificationData = await createNotificationOnDB(
+        user.id,
+        contact.id,
+        "STARTED_CONVERSATION",
+        "",
+        newChatRoomID
+      );
       await sendPushNotification(
         contact.notificationToken,
         "🚨 New conversation started!",
         `${
           user.firstName + " " + user.lastName
-        } started a conversation with you`
+        } started a conversation with you`,
+        notificationData
       );
       setIsLoading(false);
       Alert.alert("Success!", "Conversation started successfully", [

@@ -25,6 +25,10 @@ import {
   decrementLikesMutation,
 } from "../utils/postsOperations";
 import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
+import {
+  createNotificationOnDB,
+  sendPushNotification,
+} from "../utils/notifications";
 
 export default function PostCard(post) {
   const user = useSelector((state) => state.user);
@@ -47,6 +51,20 @@ export default function PostCard(post) {
       notificationAsync(NotificationFeedbackType.Success);
       dispatch(incrementLikesReducer(data));
       await incrementLikesMutation(id, likedBy, numberOfLikes, user.id);
+      if (author.id !== user.id) {
+        const notificationData = await createNotificationOnDB(
+          user.id,
+          author.id,
+          "LIKED_POST",
+          id
+        );
+        await sendPushNotification(
+          author.notificationToken,
+          `${user.firstName} liked your post 👍`,
+          "Go to Only Chats to check it out!",
+          notificationData
+        );
+      }
     }
   }
 

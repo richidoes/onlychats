@@ -15,6 +15,9 @@ import NewPost from "../screens/NewPost";
 import ChatRoom from "../screens/ChatRoom";
 import ContactProfile from "../screens/ContactProfile";
 import NewChat from "../screens/NewChat";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import ShowPost from "../screens/ShowPost";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,6 +33,8 @@ export default function Root({ colorScheme }) {
 }
 
 function BottomNavigation() {
+  const { notifications } = useSelector((state) => state.notifications);
+  const unSeenNotifications = notifications.map((not) => not.isSeen === false);
   return (
     <Tab.Navigator initialRouteName="Home">
       <Tab.Screen
@@ -52,6 +57,18 @@ function BottomNavigation() {
           ),
           headerShown: false,
           tabBarLabel: "Chats",
+        }}
+      />
+      <Tab.Screen
+        name="NotificationsStack"
+        component={NotificationsStack}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="ios-notifications" color={color} />
+          ),
+          headerShown: false,
+          tabBarLabel: "Notifications",
+          tabBarBadge: unSeenNotifications.length,
         }}
       />
       <Tab.Screen
@@ -89,6 +106,8 @@ function HomeStack() {
         component={NewPost}
         options={{ presentation: "modal" }}
       />
+      <Stack.Screen name="ShowPost" component={ShowPost} />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
     </Stack.Navigator>
   );
 }
@@ -110,6 +129,25 @@ function ChatsStack() {
           headerTitle: "New Chat",
         }}
       />
+      <Stack.Screen
+        name="ContactProfile"
+        component={ContactProfile}
+        options={{ presentation: "modal", headerTitle: "Contact Info" }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function NotificationsStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Notifications"
+        component={NotificationsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
+      <Stack.Screen name="ShowPost" component={ShowPost} />
       <Stack.Screen
         name="ContactProfile"
         component={ContactProfile}

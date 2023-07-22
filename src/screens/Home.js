@@ -11,6 +11,7 @@ import { Button } from "react-native";
 import PostCard from "../components/PostCard";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts, setPostsReducer } from "../features/posts";
+import * as Notifications from "expo-notifications";
 
 export default function Home() {
   const navigation = useNavigation();
@@ -18,6 +19,30 @@ export default function Home() {
   const dispatch = useDispatch();
   const [nextToken, setNextToken] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const subscription = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const notificationData = response.notification.request.content.data;
+        switch (notificationData.type) {
+          case "LIKED_POST": {
+            navigation.navigate("ShowPost", {
+              postID: notificationData.postID,
+            });
+            break;
+          }
+          case "STARTED_CONVERSATION": {
+            navigation.navigate("ChatRoom", {
+              chatRoomID: notificationData.chatRoomID,
+              contactInfo: notificationData.sender,
+            });
+            break;
+          }
+        }
+      }
+    );
+    return () => subscription.remove();
+  }, []);
 
   React.useEffect(() => {
     async function checkFirstLaunch() {
