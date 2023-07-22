@@ -13,13 +13,16 @@ export default function MyInput({
   value,
   onChangeText,
   secureTextEntry,
+  hiddenLabel,
 }) {
   const theme = useColorScheme();
   return (
     <View style={styles.container}>
-      <MyText style={{ fontWeight: "bold", marginBottom: 5 }} type={"caption"}>
-        {label}
-      </MyText>
+      {!hiddenLabel && (
+        <MyText style={{ fontWeight: "bold", marginBottom: 10 }} type="caption">
+          {label}
+        </MyText>
+      )}
       <TextInput
         placeholder={label}
         style={[styles.input, styles[theme]]}

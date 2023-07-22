@@ -14,6 +14,7 @@ import Chats from "../screens/Chats";
 import NewPost from "../screens/NewPost";
 import ChatRoom from "../screens/ChatRoom";
 import ContactProfile from "../screens/ContactProfile";
+import NewChat from "../screens/NewChat";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,14 @@ function ChatsStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="ChatRoom" component={ChatRoom} />
+      <Stack.Screen
+        name="NewChat"
+        component={NewChat}
+        options={{
+          presentation: "modal",
+          headerTitle: "New Chat",
+        }}
+      />
       <Stack.Screen
         name="ContactProfile"
         component={ContactProfile}

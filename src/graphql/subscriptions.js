@@ -92,8 +92,8 @@ export const onDeleteUser = /* GraphQL */ `
   }
 `;
 export const onCreateChatRoom = /* GraphQL */ `
-  subscription OnCreateChatRoom($filter: ModelSubscriptionChatRoomFilterInput) {
-    onCreateChatRoom(filter: $filter) {
+  subscription OnCreateChatRoom {
+    onCreateChatRoom {
       id
       isSeenBy
       messages {

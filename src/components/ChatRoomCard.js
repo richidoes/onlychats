@@ -6,23 +6,32 @@ import {
   View,
   Text,
   Pressable,
+  Alert,
 } from "react-native";
 import MyText from "./MyText";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import Colors from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { API } from "aws-amplify";
+import { deleteUserChatRooms } from "../graphql/mutations";
+import { removeChatRoom } from "../features/chatRooms";
 
 export default function ChatRoomCard(chat) {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const { chatRoomID, chatRoom } = chat;
   const { isSeenBy, participants, lastMessage } = chatRoom;
   const theme = useColorScheme();
   const navigation = useNavigation();
 
   const contactInfo =
-    participants.items[0].user.id === user.id
+    participants.items.length < 2
+      ? {
+          firstName: "User left ",
+        }
+      : participants.items[0].user.id === user.id
       ? {
           id: participants.items[1].user.id,
           firstName: participants.items[1].user.firstName,
@@ -38,6 +47,34 @@ export default function ChatRoomCard(chat) {
           notificationToken: participants.items[0].user.notificationToken,
         };
   const isSeenByCurrentUser = isSeenBy !== null && isSeenBy.includes(user.id);
+
+  async function handleDeleteConversation() {
+    Alert.alert(
+      "Leave Conversation",
+      "Do you want to leave and delete this conversation?",
+      [
+        {
+          text: "Confirm",
+          onPress: async () => {
+            await API.graphql({
+              query: deleteUserChatRooms,
+              variables: {
+                input: {
+                  id: chat.id,
+                },
+              },
+            });
+            dispatch(removeChatRoom(chat.id));
+          },
+          style: "destructive",
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ]
+    );
+  }
   return (
     <Pressable
       onPress={() =>
@@ -84,12 +121,13 @@ export default function ChatRoomCard(chat) {
                   marginRight: 13,
                 }}
               >
-                {moment(lastMessage?.createdAt).fromNow()}
+                {moment(lastMessage?.createdAt).fromNow().slice(0, 13)}
               </MyText>
               <Ionicons
                 name="ellipsis-horizontal"
                 size={24}
                 color={Colors[theme].text + "80"}
+                onPress={handleDeleteConversation}
               />
             </View>
           </View>

@@ -1,8 +1,11 @@
-import { API } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import {
   updateUser,
   deleteUser as deleteUserMutation,
+  createChatRoom,
+  createUserChatRooms,
 } from "../graphql/mutations";
+import { getUser, listUsers } from "../graphql/queries";
 
 export const updateUserPicture = async (userID, newPhoto) => {
   try {
@@ -121,5 +124,81 @@ export const deleteUser = async (userID) => {
     console.log("user deleted successfully");
   } catch (e) {
     console.log("error deleting user");
+  }
+};
+
+export const getUserByID = async (ID) => {
+  try {
+    const { data } = await API.graphql(
+      graphqlOperation(getUser, {
+        id: ID,
+      })
+    );
+    if (data.getUser) {
+      return data.getUser;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getUserByEmail = async (email) => {
+  try {
+    const { data } = await API.graphql({
+      query: listUsers,
+      variables: {
+        filter: {
+          email: {
+            eq: email,
+          },
+        },
+      },
+    });
+    if (data.listUsers.items) {
+      return data.listUsers.items[0];
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const createNewChatRoom = async () => {
+  try {
+    const { data } = await API.graphql({
+      query: createChatRoom,
+      variables: {
+        input: {
+          chatRoomLastMessageId: "92e2cfe1-b1fd-4273-82a9-b1fdd4af7070",
+          isSeenBy: [],
+        },
+      },
+    });
+    if (data.createChatRoom) {
+      return data.createChatRoom.id;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const addUserToChatRoom = async (userID, chatRoomID) => {
+  try {
+    await API.graphql({
+      query: createUserChatRooms,
+      variables: {
+        input: {
+          userID: userID,
+          chatRoomID: chatRoomID,
+        },
+      },
+    });
+  } catch (e) {
+    console.log(e);
   }
 };
