@@ -1,37 +1,35 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Image,
   StyleSheet,
   useColorScheme,
   View,
-  Linking,
   Alert,
   Pressable,
-} from "react-native";
-import MyText from "./MyText";
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import Colors from "../../constants/colors";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
+} from 'react-native';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { notificationAsync, NotificationFeedbackType } from 'expo-haptics';
+import Colors from '../../constants/colors';
 import {
   incrementLikesReducer,
   decrementLikesReducer,
   deletePostReducer,
-} from "../features/posts";
+} from '../features/posts';
 import {
   deletePost,
   incrementLikesMutation,
   decrementLikesMutation,
-} from "../utils/postsOperations";
-import { notificationAsync, NotificationFeedbackType } from "expo-haptics";
+} from '../utils/postsOperations';
+import MyText from './MyText';
 import {
   createNotificationOnDB,
   sendPushNotification,
-} from "../utils/notifications";
+} from '../utils/notifications';
 
 export default function PostCard(post) {
-  const user = useSelector((state) => state.user);
+  const user = useSelector(state => state.user);
   const theme = useColorScheme();
   const dispatch = useDispatch();
   const { author, content, createdAt, id, likedBy, numberOfLikes } = post;
@@ -55,13 +53,13 @@ export default function PostCard(post) {
         const notificationData = await createNotificationOnDB(
           user.id,
           author.id,
-          "LIKED_POST",
+          'LIKED_POST',
           id
         );
         await sendPushNotification(
           author.notificationToken,
           `${user.firstName} liked your post 👍`,
-          "Go to Only Chats to check it out!",
+          'Go to Only Chats to check it out!',
           notificationData
         );
       }
@@ -69,61 +67,68 @@ export default function PostCard(post) {
   }
 
   function handleReport() {
-    Alert.alert("Report User", "Would you like to report this post or user?", [
+    if (author.id !== user.id) {
+      return Alert.alert('Report Post', 'Would you like to report this post?', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('canceled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Report',
+          onPress: async () => {
+            dispatch(deletePostReducer(id));
+            await deletePost(id);
+            Alert.alert(
+              'Thank you for your report. We will review it as soon as possible.'
+            );
+          },
+          style: 'destructive',
+        },
+      ]);
+    }
+
+    return Alert.alert('Delete Post', 'Would you like to delete this post?', [
       {
-        text: "Cancel",
-        onPress: () => console.log("canceled"),
-        style: "cancel",
+        text: 'Cancel',
+        onPress: () => console.log('canceled'),
+        style: 'cancel',
       },
       {
-        text: "Resport Post or User",
+        text: 'Delete',
         onPress: async () => {
           dispatch(deletePostReducer(id));
-          await sendReportEmail();
           await deletePost(id);
+          Alert.alert('Your post was successfully deleted 👍🏻');
         },
-        style: "destructive",
+        style: 'destructive',
       },
     ]);
-  }
-
-  async function sendReportEmail() {
-    const url = `mailto:${"codewithbeto.dev@gmail.com"}?subject=Report&body=${
-      "This is an automatic email to the Code With Beto Reporting team. Please write any concerns above this paragraph and do not delete anything below. " +
-      "User ID: " +
-      user.id +
-      "\n" +
-      "Post ID: " +
-      id
-    }`;
-
-    await Linking.openURL(url);
-    alert("Thank you for your report. We will review it as soon as possible.");
   }
 
   return (
     <View
       style={[
         styles.container,
-        { borderBottomColor: Colors[theme].text + "80" },
+        { borderBottomColor: `${Colors[theme].text}80` },
       ]}
     >
       <View style={{ paddingHorizontal: 17 }}>
         <View style={styles.postHeader}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
               source={{
                 uri: author?.profilePicture
                   ? author.profilePicture
-                  : "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+                  : 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png',
               }}
               style={styles.image}
             />
             <View style={{ paddingLeft: 10 }}>
-              <MyText style={{ fontWeight: "500" }}>{author?.firstName}</MyText>
+              <MyText style={{ fontWeight: '500' }}>{author?.firstName}</MyText>
               <MyText
                 type="caption"
-                style={{ color: Colors[theme].text + "70", fontWeight: "500" }}
+                style={{ color: `${Colors[theme].text}70`, fontWeight: '500' }}
               >
                 {moment(createdAt).fromNow()}
               </MyText>
@@ -132,16 +137,16 @@ export default function PostCard(post) {
           <Ionicons
             name="ellipsis-horizontal"
             size={24}
-            color={Colors[theme].text + "70"}
+            color={`${Colors[theme].text}70`}
             onPress={handleReport}
           />
         </View>
         <MyText
-          style={{ color: Colors[theme].text + "70", paddingVertical: 10 }}
+          style={{ color: `${Colors[theme].text}70`, paddingVertical: 10 }}
         >
           {content}
         </MyText>
-        <View style={{ flexDirection: "row", alignItems: "baseline" }}>
+        <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
           <Pressable onPress={handleLike}>
             {likedBy !== null && likedBy.includes(user.id) ? (
               <AntDesign
@@ -153,7 +158,7 @@ export default function PostCard(post) {
               <AntDesign
                 name="like2"
                 size={21}
-                color={Colors[theme].text + "50"}
+                color={`${Colors[theme].text}50`}
               />
             )}
           </Pressable>
@@ -164,7 +169,7 @@ export default function PostCard(post) {
                 ? {
                     color: Colors.light.tabIconSelected,
                   }
-                : { color: Colors[theme].text + "50" },
+                : { color: `${Colors[theme].text}50` },
               { marginLeft: 5 },
             ]}
           >
@@ -187,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   postHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
