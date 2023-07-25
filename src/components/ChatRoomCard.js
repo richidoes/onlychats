@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,21 +7,21 @@ import {
   Text,
   Pressable,
   Alert,
-} from "react-native";
-import MyText from "./MyText";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import Colors from "../../constants/colors";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { API } from "aws-amplify";
-import { deleteUserChatRooms } from "../graphql/mutations";
-import { removeChatRoom } from "../features/chatRooms";
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { API } from 'aws-amplify';
+import Colors from '../../constants/colors';
+import MyText from './MyText';
+import { deleteUserChatRooms } from '../graphql/mutations';
+import { removeChatRoom } from '../features/chatRooms';
 
 export default function ChatRoomCard(chat) {
-  const user = useSelector((state) => state.user);
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const { chatRoomID, chatRoom } = chat;
+  const { chatRoomId, chatRoom } = chat;
   const { isSeenBy, participants, lastMessage } = chatRoom;
   const theme = useColorScheme();
   const navigation = useNavigation();
@@ -29,7 +29,7 @@ export default function ChatRoomCard(chat) {
   const contactInfo =
     participants.items.length < 2
       ? {
-          firstName: "User left ",
+          firstName: 'User left ',
         }
       : participants.items[0].user.id === user.id
       ? {
@@ -50,11 +50,11 @@ export default function ChatRoomCard(chat) {
 
   async function handleDeleteConversation() {
     Alert.alert(
-      "Leave Conversation",
-      "Do you want to leave and delete this conversation?",
+      'Leave Conversation',
+      'Do you want to leave and delete this conversation?',
       [
         {
-          text: "Confirm",
+          text: 'Confirm',
           onPress: async () => {
             await API.graphql({
               query: deleteUserChatRooms,
@@ -66,11 +66,11 @@ export default function ChatRoomCard(chat) {
             });
             dispatch(removeChatRoom(chat.id));
           },
-          style: "destructive",
+          style: 'destructive',
         },
         {
-          text: "Cancel",
-          style: "cancel",
+          text: 'Cancel',
+          style: 'cancel',
         },
       ]
     );
@@ -78,46 +78,46 @@ export default function ChatRoomCard(chat) {
   return (
     <Pressable
       onPress={() =>
-        navigation.navigate("ChatRoom", { contactInfo, chatRoomID })
+        navigation.navigate('ChatRoom', { contactInfo, chatRoomId })
       }
       style={[
         styles.container,
-        { borderBottomColor: Colors[theme].text + "60" },
+        { borderBottomColor: `${Colors[theme].text}60` },
       ]}
     >
       <View style={styles.containerWithPadding}>
         <View
           style={[
             styles.isSeen,
-            isSeenByCurrentUser && { backgroundColor: "transparent" },
+            isSeenByCurrentUser && { backgroundColor: 'transparent' },
           ]}
         />
         <Image
           source={{
             uri: contactInfo.profilePicture
               ? contactInfo.profilePicture
-              : "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+              : 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png',
           }}
           style={styles.image}
         />
         <View style={{ flexShrink: 1 }}>
           <View
             style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "baseline",
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
             }}
           >
-            <MyText style={{ fontWeight: "500" }}>
+            <MyText style={{ fontWeight: '500' }}>
               {contactInfo.firstName} {contactInfo.lastName}
             </MyText>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <MyText
                 type="caption"
                 style={{
-                  color: Colors[theme].text + "80",
-                  fontWeight: "500",
+                  color: `${Colors[theme].text}80`,
+                  fontWeight: '500',
                   marginRight: 13,
                 }}
               >
@@ -126,13 +126,13 @@ export default function ChatRoomCard(chat) {
               <Ionicons
                 name="ellipsis-horizontal"
                 size={24}
-                color={Colors[theme].text + "80"}
+                color={`${Colors[theme].text}80`}
                 onPress={handleDeleteConversation}
               />
             </View>
           </View>
           <MyText
-            style={{ color: Colors[theme].text + "90" }}
+            style={{ color: `${Colors[theme].text}90` }}
             numberOfLines={2}
             ellipsizeMode="tail"
           >
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   containerWithPadding: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 10,
   },
   image: {

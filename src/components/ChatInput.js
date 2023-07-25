@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   TextInput,
   StyleSheet,
@@ -6,23 +6,23 @@ import {
   Image,
   Pressable,
   useColorScheme,
-} from "react-native";
-import Colors from "../../constants/colors";
-import { useSelector } from "react-redux";
-import { API, graphqlOperation } from "aws-amplify";
-import { createMessage, updateChatRoom } from "../graphql/mutations";
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import { API, graphqlOperation } from 'aws-amplify';
+import Colors from '../../constants/colors';
+import { createMessage, updateChatRoom } from '../graphql/mutations';
 
-export default function ChatInput({ chatRoomID, contactToken }) {
-  const user = useSelector((state) => state.user);
-  const [text, setText] = React.useState("");
+export default function ChatInput({ chatRoomId, contactToken }) {
+  const user = useSelector(state => state.user);
+  const [text, setText] = React.useState('');
   const theme = useColorScheme();
 
   async function handleSubmit() {
     const input = {
       content: text.trim(),
       messageAuthorId: user.id,
-      chatRoomID: chatRoomID,
-      chatRoomMessagesId: chatRoomID,
+      chatRoomID: chatRoomId,
+      chatRoomMessagesId: chatRoomId,
     };
     try {
       const { data } = await API.graphql(
@@ -31,14 +31,14 @@ export default function ChatInput({ chatRoomID, contactToken }) {
       await API.graphql(
         graphqlOperation(updateChatRoom, {
           input: {
-            id: chatRoomID,
+            id: chatRoomId,
             chatRoomLastMessageId: data.createMessage.id,
             isSeenBy: user.id,
           },
         })
       );
-      console.log("message sent and chatRoom updated");
-      setText("");
+      console.log('message sent and chatRoom updated');
+      setText('');
       await sendPushNotification();
     } catch (e) {
       console.log(e);
@@ -49,24 +49,23 @@ export default function ChatInput({ chatRoomID, contactToken }) {
     if (contactToken !== null) {
       const message = {
         to: contactToken,
-        sound: "default",
-        title: user.firstName + " " + user.lastName,
+        sound: 'default',
+        title: `${user.firstName} ${user.lastName}`,
         body: text,
-        data: { someData: "goes here" },
+        data: { someData: 'goes here' },
       };
 
-      await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
+      await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Accept-encoding": "gzip, deflate",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Accept-encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(message),
-        categoryIdentifier: "replyMessage",
+        categoryIdentifier: 'replyMessage',
       });
     }
-    return;
   }
 
   return (
@@ -75,14 +74,14 @@ export default function ChatInput({ chatRoomID, contactToken }) {
         style={[
           styles.textInput,
           {
-            borderColor: Colors[theme].text + "65",
+            borderColor: `${Colors[theme].text}65`,
             color: Colors[theme].text,
-            backgroundColor: theme === "dark" ? "#000" : "#fff",
+            backgroundColor: theme === 'dark' ? '#000' : '#fff',
           },
         ]}
         placeholder="Go to codewithbeto.dev :)"
         placeholderTextColor="gray"
-        scrollEnabled={true}
+        scrollEnabled
         textAlign="left"
         textAlignVertical="bottom"
         onChangeText={setText}
@@ -100,9 +99,9 @@ export default function ChatInput({ chatRoomID, contactToken }) {
             text.trim().length < 1 ? { opacity: 0.3 } : { opacity: 1 },
           ]}
           source={
-            theme === "light"
-              ? require("../../assets/send.png")
-              : require("../../assets/sendDark.png")
+            theme === 'light'
+              ? require('../../assets/send.png')
+              : require('../../assets/sendDark.png')
           }
         />
       </Pressable>
@@ -112,9 +111,9 @@ export default function ChatInput({ chatRoomID, contactToken }) {
 
 const styles = StyleSheet.create({
   textInputBar: {
-    width: "95%",
-    flexDirection: "row",
-    alignSelf: "center",
+    width: '95%',
+    flexDirection: 'row',
+    alignSelf: 'center',
     flexGrow: 0,
   },
   textInput: {
@@ -127,10 +126,10 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingRight: 40,
     flexGrow: 0,
-    minWidth: "95%",
+    minWidth: '95%',
   },
   sendButtonWrapper: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -4,
     right: -8,
     width: 44,

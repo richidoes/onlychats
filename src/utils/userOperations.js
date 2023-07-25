@@ -1,11 +1,11 @@
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation } from 'aws-amplify';
 import {
   updateUser,
   deleteUser as deleteUserMutation,
   createChatRoom,
   createUserChatRooms,
-} from "../graphql/mutations";
-import { getUser, listUsers } from "../graphql/queries";
+} from '../graphql/mutations';
+import { getUser, listUsers } from '../graphql/queries';
 
 export const updateUserPicture = async (userID, newPhoto) => {
   try {
@@ -18,9 +18,9 @@ export const updateUserPicture = async (userID, newPhoto) => {
         },
       },
     });
-    console.log("profile picture updated");
+    console.log('profile picture updated');
   } catch (e) {
-    console.log("error updating user photo");
+    console.log('error updating user photo');
   }
 };
 
@@ -35,9 +35,9 @@ export const updateUserStatus = async (userID, newStatus) => {
         },
       },
     });
-    console.log("user status updated");
+    console.log('user status updated');
   } catch (e) {
-    console.log("error updating user status");
+    console.log('error updating user status');
   }
 };
 
@@ -52,9 +52,9 @@ export const updateUserFirstName = async (userID, newFirstName) => {
         },
       },
     });
-    console.log("user firstName updated");
+    console.log('user firstName updated');
   } catch (e) {
-    console.log("error updating user firstName");
+    console.log('error updating user firstName');
   }
 };
 
@@ -69,9 +69,9 @@ export const updateUserLastName = async (userID, newLastName) => {
         },
       },
     });
-    console.log("user lastName updated");
+    console.log('user lastName updated');
   } catch (e) {
-    console.log("error updating user lastName");
+    console.log('error updating user lastName');
   }
 };
 
@@ -86,9 +86,9 @@ export const updateUserNotificationToken = async (userID, token) => {
         },
       },
     });
-    console.log("user push notification token updated");
+    console.log('user push notification token updated');
   } catch (e) {
-    console.log("error updating user push notification token");
+    console.log('error updating user push notification token');
   }
 };
 
@@ -100,18 +100,18 @@ export const updateUserLocation = async (userID, location) => {
       variables: {
         input: {
           id: userID,
-          latitude: latitude,
-          longitude: longitude,
+          latitude,
+          longitude,
         },
       },
     });
-    console.log("user location updated");
+    console.log('user location updated');
   } catch (e) {
-    console.log("error updating user location");
+    console.log('error updating user location');
   }
 };
 
-export const deleteUser = async (userID) => {
+export const deleteUser = async userID => {
   try {
     await API.graphql({
       query: deleteUserMutation,
@@ -121,13 +121,13 @@ export const deleteUser = async (userID) => {
         },
       },
     });
-    console.log("user deleted successfully");
+    console.log('user deleted successfully');
   } catch (e) {
-    console.log("error deleting user");
+    console.log('error deleting user');
   }
 };
 
-export const getUserByID = async (ID) => {
+export const getUserByID = async ID => {
   try {
     const { data } = await API.graphql(
       graphqlOperation(getUser, {
@@ -136,15 +136,14 @@ export const getUserByID = async (ID) => {
     );
     if (data.getUser) {
       return data.getUser;
-    } else {
-      return null;
     }
+    return null;
   } catch (e) {
     console.log(e);
   }
 };
 
-export const getUserByEmail = async (email) => {
+export const getUserByEmail = async email => {
   try {
     const { data } = await API.graphql({
       query: listUsers,
@@ -158,9 +157,8 @@ export const getUserByEmail = async (email) => {
     });
     if (data.listUsers.items) {
       return data.listUsers.items[0];
-    } else {
-      return null;
     }
+    return null;
   } catch (e) {
     console.log(e);
   }
@@ -172,29 +170,28 @@ export const createNewChatRoom = async () => {
       query: createChatRoom,
       variables: {
         input: {
-          chatRoomLastMessageId: "92e2cfe1-b1fd-4273-82a9-b1fdd4af7070",
+          chatRoomLastMessageId: '92e2cfe1-b1fd-4273-82a9-b1fdd4af7070',
           isSeenBy: [],
         },
       },
     });
     if (data.createChatRoom) {
       return data.createChatRoom.id;
-    } else {
-      return null;
     }
+    return null;
   } catch (e) {
     console.log(e);
   }
 };
 
-export const addUserToChatRoom = async (userID, chatRoomID) => {
+export const addUserToChatRoom = async (userId, chatRoomId) => {
   try {
     await API.graphql({
       query: createUserChatRooms,
       variables: {
         input: {
-          userID: userID,
-          chatRoomID: chatRoomID,
+          userId,
+          chatRoomId,
         },
       },
     });

@@ -1,37 +1,36 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Button,
   KeyboardAvoidingView,
   Platform,
   useColorScheme,
   useWindowDimensions,
-} from "react-native";
-import MyText from "../components/MyText";
-import { useRoute } from "@react-navigation/native";
-import { API, graphqlOperation } from "aws-amplify";
-import { messagesByChatRoom } from "../graphql/queries";
-import { FlashList } from "@shopify/flash-list";
-import { useNavigation } from "@react-navigation/core";
-import Colors from "../../constants/colors";
-import ChatRoomHeader from "../components/ChatRoomHeader";
-import ChatInput from "../components/ChatInput";
-import ChatMessage from "../components/ChatMessage";
-import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../features/user";
-import { setChatRooms } from "../features/chatRooms";
-import { getUser } from "../graphql/queries";
-import { onCreateMessage } from "../graphql/subscriptions";
+} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { API, graphqlOperation } from 'aws-amplify';
+import { FlashList } from '@shopify/flash-list';
+import { useNavigation } from '@react-navigation/core';
+import { useSelector, useDispatch } from 'react-redux';
+import MyText from '../components/MyText';
+import { messagesByChatRoom, getUser } from '../graphql/queries';
+import Colors from '../../constants/colors';
+import ChatRoomHeader from '../components/ChatRoomHeader';
+import ChatInput from '../components/ChatInput';
+import ChatMessage from '../components/ChatMessage';
+import { setUser } from '../features/user';
+import { setChatRooms } from '../features/chatRooms';
+import { onCreateMessage } from '../graphql/subscriptions';
 
 export default function ChatRoom() {
   const route = useRoute();
-  const user = useSelector((state) => state.user);
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const { chatRoomID, contactInfo } = route.params;
+  const { chatRoomId, contactInfo } = route.params;
   const navigation = useNavigation();
   const theme = useColorScheme();
   const [messages, setMessages] = React.useState([]);
   const phoneHeight = useWindowDimensions();
-  const [nextToken, setNextToken] = React.useState("");
+  const [nextToken, setNextToken] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -40,13 +39,13 @@ export default function ChatRoom() {
 
   React.useEffect(() => {
     API.graphql(
-      graphqlOperation(onCreateMessage, { chatRoomID: chatRoomID })
+      graphqlOperation(onCreateMessage, { chatRoomID: chatRoomId })
     ).subscribe({
       next: ({ provider, value }) => {
         fetchMessages();
         fetchUser();
       },
-      error: (e) => console.log(e),
+      error: e => console.log(e),
     });
   }, []);
 
@@ -61,9 +60,9 @@ export default function ChatRoom() {
       setIsLoading(true);
       const { data } = await API.graphql(
         graphqlOperation(messagesByChatRoom, {
-          chatRoomID: chatRoomID,
+          chatRoomID: chatRoomId,
           limit: 100,
-          sortDirection: "DESC",
+          sortDirection: 'DESC',
         })
       );
       setNextToken(data.messagesByChatRoom.nextToken);
@@ -77,17 +76,17 @@ export default function ChatRoom() {
 
   async function fetchMoreMessages() {
     if (nextToken === null) {
-      alert("no more messages to load");
+      alert('no more messages to load');
       return;
     }
     try {
       setIsLoading(true);
       const { data } = await API.graphql(
         graphqlOperation(messagesByChatRoom, {
-          chatRoomID: chatRoomID,
+          chatRoomID: chatRoomId,
           limit: 100,
-          sortDirection: "DESC",
-          nextToken: nextToken,
+          sortDirection: 'DESC',
+          nextToken,
         })
       );
       setMessages([...messages, ...data.messagesByChatRoom.items]);
@@ -123,7 +122,7 @@ export default function ChatRoom() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={phoneHeight.height < 700 ? 60 : 90}
       style={{
         flex: 1,
@@ -137,14 +136,14 @@ export default function ChatRoom() {
         inverted
         ListFooterComponent={
           <Button
-            title={isLoading ? "loading" : "load more messages"}
+            title={isLoading ? 'loading' : 'load more messages'}
             disabled={isLoading || nextToken === null}
             onPress={fetchMoreMessages}
           />
         }
       />
       <ChatInput
-        chatRoomID={chatRoomID}
+        chatRoomId={chatRoomId}
         contactToken={contactInfo.notificationToken ?? null}
       />
     </KeyboardAvoidingView>
