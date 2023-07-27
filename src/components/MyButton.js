@@ -3,33 +3,34 @@ import {
   TouchableOpacity,
   useColorScheme,
   StyleSheet,
-} from "react-native";
-import Colors from "../../constants/colors";
+} from 'react-native';
+import { array, func, object, oneOfType, string } from 'prop-types';
+import Colors from '../../constants/colors';
 
 export default function MyButton({
   title,
   onPress,
-  type = "primary",
+  type = 'primary',
   style,
   ...otherProps
 }) {
   const theme = useColorScheme();
 
   const buttonStyle =
-    theme === "light" && type === "primary"
+    theme === 'light' && type === 'primary'
       ? styles.primaryLight
-      : theme === "light" && type === "secondary"
+      : theme === 'light' && type === 'secondary'
       ? styles.secondaryLight
-      : theme === "dark" && type === "primary"
+      : theme === 'dark' && type === 'primary'
       ? styles.primaryDark
       : styles.secondaryDark;
 
   const textStyle =
-    theme === "light" && type === "primary"
+    theme === 'light' && type === 'primary'
       ? Colors.light.background
-      : theme === "light" && type === "secondary"
+      : theme === 'light' && type === 'secondary'
       ? Colors.light.text
-      : theme === "dark" && type === "primary"
+      : theme === 'dark' && type === 'primary'
       ? Colors.dark.background
       : Colors.light.background;
 
@@ -46,19 +47,19 @@ export default function MyButton({
 
 const styles = StyleSheet.create({
   button: {
-    width: "100%",
+    width: '100%',
     height: 50,
     padding: 10,
     marginVertical: 10,
     borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   primaryLight: {
     backgroundColor: Colors.light.text,
   },
   secondaryLight: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: Colors.light.text,
   },
@@ -66,12 +67,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.text,
   },
   secondaryDark: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: Colors.dark.text,
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
+
+MyButton.propTypes = {
+  onPress: func,
+  type: string,
+  style: oneOfType([object, array]),
+};

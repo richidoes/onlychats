@@ -1,11 +1,11 @@
-import * as React from "react";
-import { useColorScheme, View as DefaultView } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Colors from "../../../constants/colors";
+import * as React from 'react';
+import { useColorScheme, View as DefaultView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Colors from '../../../constants/colors';
 
-export function View(props) {
+export function View({ style }, otherProps) {
   const theme = useColorScheme();
-  const { style, ...otherProps } = props;
+
   return (
     <DefaultView
       style={[

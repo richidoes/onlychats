@@ -1,4 +1,5 @@
 import { API, graphqlOperation } from 'aws-amplify';
+import { Alert } from 'react-native';
 import {
   updateUser,
   deleteUser as deleteUserMutation,
@@ -18,9 +19,8 @@ export const updateUserPicture = async (userID, newPhoto) => {
         },
       },
     });
-    console.log('profile picture updated');
   } catch (e) {
-    console.log('error updating user photo');
+    Alert.alert('Error updating user photo', e);
   }
 };
 
@@ -35,9 +35,8 @@ export const updateUserStatus = async (userID, newStatus) => {
         },
       },
     });
-    console.log('user status updated');
   } catch (e) {
-    console.log('error updating user status');
+    Alert.alert('Error updating user status', e);
   }
 };
 
@@ -52,9 +51,8 @@ export const updateUserFirstName = async (userID, newFirstName) => {
         },
       },
     });
-    console.log('user firstName updated');
   } catch (e) {
-    console.log('error updating user firstName');
+    Alert.alert('Error updating user first name', e);
   }
 };
 
@@ -69,9 +67,8 @@ export const updateUserLastName = async (userID, newLastName) => {
         },
       },
     });
-    console.log('user lastName updated');
   } catch (e) {
-    console.log('error updating user lastName');
+    Alert.alert('Error updating user last name', e);
   }
 };
 
@@ -86,9 +83,8 @@ export const updateUserNotificationToken = async (userID, token) => {
         },
       },
     });
-    console.log('user push notification token updated');
   } catch (e) {
-    console.log('error updating user push notification token');
+    Alert.alert('Error updating user push notification token', e);
   }
 };
 
@@ -105,9 +101,8 @@ export const updateUserLocation = async (userID, location) => {
         },
       },
     });
-    console.log('user location updated');
   } catch (e) {
-    console.log('error updating user location');
+    Alert.alert('Error updating user location', e);
   }
 };
 
@@ -121,13 +116,13 @@ export const deleteUser = async userID => {
         },
       },
     });
-    console.log('user deleted successfully');
   } catch (e) {
-    console.log('error deleting user');
+    Alert.alert('Error deleting user', e);
   }
 };
 
 export const getUserByID = async ID => {
+  let user = null;
   try {
     const { data } = await API.graphql(
       graphqlOperation(getUser, {
@@ -135,15 +130,16 @@ export const getUserByID = async ID => {
       })
     );
     if (data.getUser) {
-      return data.getUser;
+      user = data.getUser;
     }
-    return null;
   } catch (e) {
-    console.log(e);
+    console.log('Error getting user data', e);
   }
+  return user;
 };
 
 export const getUserByEmail = async email => {
+  let user = null;
   try {
     const { data } = await API.graphql({
       query: listUsers,
@@ -156,15 +152,16 @@ export const getUserByEmail = async email => {
       },
     });
     if (data.listUsers.items) {
-      return data.listUsers.items[0];
+      user = data.listUsers.items[0];
     }
-    return null;
   } catch (e) {
-    console.log(e);
+    console.log('Error getting user data', e);
   }
+  return user;
 };
 
 export const createNewChatRoom = async () => {
+  let chatRoomId = null;
   try {
     const { data } = await API.graphql({
       query: createChatRoom,
@@ -176,12 +173,12 @@ export const createNewChatRoom = async () => {
       },
     });
     if (data.createChatRoom) {
-      return data.createChatRoom.id;
+      chatRoomId = data.createChatRoom.id;
     }
-    return null;
   } catch (e) {
-    console.log(e);
+    console.log('Error creating chatRoom', e);
   }
+  return chatRoomId;
 };
 
 export const addUserToChatRoom = async (userId, chatRoomId) => {
@@ -196,6 +193,6 @@ export const addUserToChatRoom = async (userId, chatRoomId) => {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.log('Error adding user to chatRoom', e);
   }
 };

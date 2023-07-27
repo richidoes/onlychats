@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Alert,
   Button,
   KeyboardAvoidingView,
   Platform,
@@ -11,7 +12,6 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/core';
 import { useSelector, useDispatch } from 'react-redux';
-import MyText from '../components/MyText';
 import { messagesByChatRoom, getUser } from '../graphql/queries';
 import Colors from '../../constants/colors';
 import ChatRoomHeader from '../components/ChatRoomHeader';
@@ -41,11 +41,11 @@ export default function ChatRoom() {
     API.graphql(
       graphqlOperation(onCreateMessage, { chatRoomID: chatRoomId })
     ).subscribe({
-      next: ({ provider, value }) => {
+      next: () => {
         fetchMessages();
         fetchUser();
       },
-      error: e => console.log(e),
+      error: e => console.log('onCreateMessage subscription error', e),
     });
   }, []);
 
@@ -70,13 +70,12 @@ export default function ChatRoom() {
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
-      console.log;
+      Alert.alert('Error loading messages');
     }
   }
 
   async function fetchMoreMessages() {
     if (nextToken === null) {
-      alert('no more messages to load');
       return;
     }
     try {
@@ -94,7 +93,7 @@ export default function ChatRoom() {
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
-      console.log(e);
+      Alert.alert('Error loading messages');
     }
   }
 

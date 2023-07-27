@@ -4,7 +4,6 @@ import {
   StyleSheet,
   useColorScheme,
   View,
-  Text,
   Pressable,
   Alert,
 } from 'react-native';
@@ -13,15 +12,16 @@ import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { API } from 'aws-amplify';
+import { object } from 'prop-types';
 import Colors from '../../constants/colors';
 import MyText from './MyText';
 import { deleteUserChatRooms } from '../graphql/mutations';
 import { removeChatRoom } from '../features/chatRooms';
 
-export default function ChatRoomCard(chat) {
+export default function ChatRoomCard({ chat }) {
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const { chatRoomId, chatRoom } = chat;
+  const { chatRoomId, chatRoom, id: chatId } = chat;
   const { isSeenBy, participants, lastMessage } = chatRoom;
   const theme = useColorScheme();
   const navigation = useNavigation();
@@ -60,11 +60,11 @@ export default function ChatRoomCard(chat) {
               query: deleteUserChatRooms,
               variables: {
                 input: {
-                  id: chat.id,
+                  id: chatId,
                 },
               },
             });
-            dispatch(removeChatRoom(chat.id));
+            dispatch(removeChatRoom(chatId));
           },
           style: 'destructive',
         },
@@ -168,3 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
+
+ChatRoomCard.propTypes = {
+  chat: object,
+};

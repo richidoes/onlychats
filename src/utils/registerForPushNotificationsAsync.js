@@ -5,7 +5,8 @@ import { startActivityAsync, ActivityAction } from 'expo-intent-launcher';
 import Constants from 'expo-constants';
 
 export async function registerForPushNotificationsAsync() {
-  let token;
+  let token = null;
+
   if (isDevice) {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
@@ -14,6 +15,7 @@ export async function registerForPushNotificationsAsync() {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+
     if (finalStatus !== 'granted') {
       Alert.alert(
         'Notifications permission denied',
@@ -21,7 +23,6 @@ export async function registerForPushNotificationsAsync() {
         [
           {
             text: 'Cancel',
-            onPress: () => console.log('cancel pressed'),
             style: 'cancel',
           },
           {
@@ -29,9 +30,10 @@ export async function registerForPushNotificationsAsync() {
             onPress: () => {
               if (Platform.OS === 'ios') {
                 Linking.openURL('app-settings:notifications');
-              } else if (Platform.OS === 'android') {
+              }
+
+              if (Platform.OS === 'android') {
                 startActivityAsync(ActivityAction.NOTIFICATION_SETTINGS);
-              } else {
               }
             },
             style: 'default',
@@ -40,22 +42,22 @@ export async function registerForPushNotificationsAsync() {
       );
       return null;
     }
+
     token = (
       await Notifications.getExpoPushTokenAsync({
         projectId: Constants.easConfig?.projectId,
       })
     ).data;
-    console.log('this is the token', token);
-  } else {
-    return;
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
   }
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
+
   return token;
 }

@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   chatRooms: [],
 };
 
 export const chatRoomsSlice = createSlice({
-  name: "chatRooms",
+  name: 'chatRooms',
   initialState,
   reducers: {
     setChatRooms: (state, action) => {
@@ -13,7 +13,7 @@ export const chatRoomsSlice = createSlice({
     },
     removeChatRoom: (state, action) => {
       const newChats = state.chatRooms.filter(
-        (chat) => chat.id !== action.payload
+        chat => chat.id !== action.payload
       );
       state.chatRooms = newChats;
     },

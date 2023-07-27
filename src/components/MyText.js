@@ -1,8 +1,9 @@
-import * as React from "react";
-import { Text, StyleSheet, useColorScheme } from "react-native";
-import Colors from "../../constants/colors";
+import * as React from 'react';
+import { Text, StyleSheet, useColorScheme } from 'react-native';
+import { array, object, oneOfType, string } from 'prop-types';
+import Colors from '../../constants/colors';
 
-export default function MyText({ children, type = "body", style }) {
+export default function MyText({ children, type = 'body', style }) {
   const theme = useColorScheme();
   return (
     <Text style={[styles[type], { color: Colors[theme].text }, style]}>
@@ -14,7 +15,7 @@ export default function MyText({ children, type = "body", style }) {
 const styles = StyleSheet.create({
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   body: {
     fontSize: 18,
@@ -23,3 +24,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+MyText.propTypes = {
+  type: string,
+  style: oneOfType([object, array]),
+};

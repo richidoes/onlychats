@@ -16,14 +16,28 @@
     // allow .js files to contain JSX code
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
 
-    // prevent eslint to complain about the "styles" variable being used before it was defined
-    "no-use-before-define": ["error", { "variables": false }],
-
     // ignore errors for the react-navigation package
     "react/prop-types": [
       "error",
-      { "ignore": ["navigation", "navigation.navigate"] }
+      {
+        "ignore": [
+          "navigation",
+          "navigation.navigate",
+          "children",
+          "title",
+          "description",
+          "style",
+          "colorScheme"
+        ]
+      }
     ],
+
+    "react/jsx-no-bind": [
+      1,
+      { "allowArrowFunctions": true, "allowFunctions": true }
+    ],
+
+    "react/require-default-props": 0,
 
     "react-hooks/exhaustive-deps": 0,
 
@@ -31,7 +45,22 @@
 
     "react/jsx-props-no-spreading": 0,
 
+    "react/forbid-prop-types": 0,
+
+    "react/no-unstable-nested-components": 0,
+
+    "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-unresolved": 0,
+
     "global-require": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "no-case-declarations": "off",
+    "func-names": "off",
+    "no-use-before-define": "off",
+    "no-unused-expressions": "off",
+    "no-param-reassign": "off",
+    "arrow-body-style": "off",
+    "prefer-destructuring": "off"
   }
 }

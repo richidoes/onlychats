@@ -1,38 +1,34 @@
-import * as React from "react";
-import { Image, Pressable, StyleSheet, View } from "react-native";
-import MyText from "./MyText";
-import { useNavigation } from "@react-navigation/native";
+import * as React from 'react';
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { string } from 'prop-types';
+import MyText from './MyText';
 
-export default function ChatRoomHeader({
-  id,
-  firstName,
-  lastName,
-  profilePicture,
-}) {
+export default function ChatRoomHeader({ id, firstName, profilePicture }) {
   const navigation = useNavigation();
   return (
     <Pressable
-      onPress={() => navigation.navigate("ContactProfile", { id })}
+      onPress={() => navigation.navigate('ContactProfile', { id })}
       style={styles.container}
     >
       <Image
         source={{
-          uri: profilePicture
-            ? profilePicture
-            : "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+          uri:
+            profilePicture ||
+            'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png',
         }}
         style={styles.image}
       />
-      <MyText style={{ fontWeight: "bold" }}>{firstName}</MyText>
+      <MyText style={{ fontWeight: 'bold' }}>{firstName}</MyText>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
     width: 35,
@@ -41,3 +37,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+ChatRoomHeader.propTypes = {
+  id: string,
+  firstName: string,
+  profilePicture: string,
+};
