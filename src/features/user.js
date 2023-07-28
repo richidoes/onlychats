@@ -16,11 +16,8 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action) => {
-      return (state = action.payload);
-    },
-    resetUser: (state) => {
-      return (state = {
+    setUser: (state, action) => (state = action.payload),
+    resetUser: (state) => (state = {
         id: null,
         firstName: null,
         lastName: null,
@@ -30,44 +27,33 @@ const userSlice = createSlice({
         notificationToken: null,
         latitude: null,
         longitude: null,
-      });
-    },
-    resetProfilePicture: (state, action) => {
-      return {
+      }),
+    resetProfilePicture: (state, action) => ({
         ...state,
         profilePicture: action.payload,
-      };
-    },
-    resetFirstName: (state, action) => {
-      return {
+      }),
+    resetFirstName: (state, action) => ({
         ...state,
         firstName: action.payload,
-      };
-    },
-    resetlastName: (state, action) => {
-      return {
+      }),
+    resetlastName: (state, action) => ({
         ...state,
         lastName: action.payload,
-      };
-    },
-    resetStatus: (state, action) => {
-      return {
+      }),
+    resetStatus: (state, action) => ({
         ...state,
         status: action.payload,
-      };
-    },
-    resetNotificationToken: (state, action) => {
-      return {
+      }),
+    resetNotificationToken: (state, action) => ({
         ...state,
         notificationToken: action.payload,
-      };
-    },
+      }),
     resetLocation: (state, action) => {
       const { latitude, longitude } = action.payload;
       return {
         ...state,
-        latitude: latitude,
-        longitude: longitude,
+        latitude,
+        longitude,
       };
     },
   },

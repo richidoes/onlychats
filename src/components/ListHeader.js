@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import MyText from "./MyText";
 import { Ionicons } from "@expo/vector-icons";
+import MyText from "./MyText";
 import Colors from "../../constants/colors";
 
 export default function ListHeader({ title, iconName, handleNavigation }) {

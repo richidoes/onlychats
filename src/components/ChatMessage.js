@@ -2,14 +2,14 @@ import React from "react";
 import { View, StyleSheet, useColorScheme, Image } from "react-native";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { LinearGradient } from "expo-linear-gradient";
 import MyText from "./MyText";
 import Colors from "../../constants/colors";
-import { LinearGradient } from "expo-linear-gradient";
 
 export default function ChatMessage({ message }) {
   const user = useSelector((state) => state.user);
   const theme = useColorScheme();
-  const myMessage = message.author.id === user.id ? true : false;
+  const myMessage = message.author.id === user.id;
 
   return (
     <View style={myMessage ? {} : styles.otherBubbleWrapper}>
@@ -29,7 +29,7 @@ export default function ChatMessage({ message }) {
           colors={
             myMessage
               ? [Colors[theme].messageFrom, Colors[theme].messageTo]
-              : [Colors[theme].text + "10", Colors[theme].text + "10"]
+              : [`${Colors[theme].text  }10`, `${Colors[theme].text  }10`]
           }
         >
           <MyText style={myMessage && { color: "#fff" }}>

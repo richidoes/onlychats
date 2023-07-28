@@ -15,7 +15,7 @@ export default function ConfirmForgotPassword() {
   } = React.useContext(AuthContext);
 
   return (
-    <React.Fragment>
+    <>
       <MyText type="title" style={{ marginBottom: 5 }}>
         Reset Password
       </MyText>
@@ -35,7 +35,7 @@ export default function ConfirmForgotPassword() {
       />
       <MyButton
         title={isLoading ? "Loading..." : "Reset Password"}
-        disabled={isLoading ? true : false}
+        disabled={!!isLoading}
         style={{ marginTop: 20 }}
         onPress={handleResetPassword}
       />
@@ -44,6 +44,6 @@ export default function ConfirmForgotPassword() {
         title="Back to Login"
         onPress={() => setAuthState("signIn")}
       />
-    </React.Fragment>
+    </>
   );
 }

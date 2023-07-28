@@ -16,7 +16,7 @@ export async function createNotificationOnDB(
         input: {
           notificationSenderId: senderID,
           receiver: receiverID,
-          type: type,
+          type,
           postID: postID ?? "",
           chatRoomID: chatRoomID ?? "",
           isSeen: false,
@@ -26,9 +26,9 @@ export async function createNotificationOnDB(
     console.log("notification created!");
     if (data.createNotification) {
       return data.createNotification;
-    } else {
+    } 
       return null;
-    }
+    
   } catch (e) {
     console.log(e);
   }
@@ -58,8 +58,8 @@ export async function sendPushNotification(token, title, body, data, category) {
     const message = {
       to: token,
       sound: "default",
-      title: title,
-      body: body,
+      title,
+      body,
       data: data ?? {},
     };
 
@@ -74,5 +74,5 @@ export async function sendPushNotification(token, title, body, data, category) {
       categoryIdentifier: category ?? "",
     });
   }
-  return;
+  
 }

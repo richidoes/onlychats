@@ -1,8 +1,8 @@
 import * as React from "react";
 import { View, useColorScheme, StyleSheet, TextInput } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import MyText from "./MyText";
 import Colors from "../../constants/colors";
-import { useSelector, useDispatch } from "react-redux";
 import {
   updateUserFirstName,
   updateUserLastName,
@@ -17,29 +17,29 @@ export default function ProfileInformation() {
     <View style={{ paddingBottom: 44 }}>
       <MyText
         type="caption"
-        style={{ fontWeight: "600", color: Colors[theme].text + "40" }}
+        style={{ fontWeight: "600", color: `${Colors[theme].text  }40` }}
       >
         INFORMATION
       </MyText>
       <InfoField
         theme={theme}
-        label={"First Name"}
+        label="First Name"
         canEdit
         value={user.firstName}
         handleUpdate={updateUserFirstName}
         handleRedux={resetFirstName}
       />
       <InfoField
-        label={"Last Name"}
+        label="Last Name"
         value={user.lastName}
         theme={theme}
         canEdit
         handleUpdate={updateUserLastName}
         handleRedux={resetlastName}
       />
-      <InfoField label={"Email"} value={user.email} theme={theme} />
+      <InfoField label="Email" value={user.email} theme={theme} />
       <InfoField
-        label={"Status"}
+        label="Status"
         value={user.status}
         theme={theme}
         canEdit
@@ -65,14 +65,14 @@ function InfoField({
     <View
       style={[
         styles.fieldContainer,
-        { borderBottomColor: Colors[theme].text + "80" },
+        { borderBottomColor: `${Colors[theme].text  }80` },
       ]}
     >
       <MyText
         type="caption"
         style={{
           fontWeight: "500",
-          color: Colors[theme].text + "80",
+          color: `${Colors[theme].text  }80`,
           paddingRight: 10,
         }}
       >

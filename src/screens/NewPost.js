@@ -1,9 +1,9 @@
 import * as React from "react";
-import MyText from "../components/MyText";
-import { ScrollView, View } from "../components/themed/Themed";
 import { useNavigation } from "@react-navigation/native";
 import { Button, StyleSheet, TextInput, useColorScheme } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import { ScrollView, View } from "../components/themed/Themed";
+import MyText from "../components/MyText";
 import Colors from "../../constants/colors";
 import { createPost } from "../utils/postsOperations";
 import { addPostReducer } from "../features/posts";
@@ -55,8 +55,8 @@ export default function NewPost() {
         maxLength={300}
         multiline
         style={[styles.input, { color: Colors[theme].text }]}
-        placeholderTextColor={Colors[theme].text + "60"}
-        placeholder={"Code With Beto is Amazing!"}
+        placeholderTextColor={`${Colors[theme].text  }60`}
+        placeholder="Code With Beto is Amazing!"
       />
       <MyText
         style={[

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
-import MyText from "./MyText";
 import { useNavigation } from "@react-navigation/native";
+import MyText from "./MyText";
 
 export default function ChatRoomHeader({
   id,
@@ -17,9 +17,7 @@ export default function ChatRoomHeader({
     >
       <Image
         source={{
-          uri: profilePicture
-            ? profilePicture
-            : "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
+          uri: profilePicture || "https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png",
         }}
         style={styles.image}
       />

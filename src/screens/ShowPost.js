@@ -1,9 +1,9 @@
 import * as React from "react";
+import { useRoute } from "@react-navigation/native";
+import { API, graphqlOperation } from "aws-amplify";
 import MyText from "../components/MyText";
 import { View } from "../components/themed/Themed";
-import { useRoute } from "@react-navigation/native";
 import { getPost } from "../graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
 import PostCard from "../components/PostCard";
 
 export default function ShowPost() {

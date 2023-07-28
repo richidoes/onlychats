@@ -1,8 +1,8 @@
 import * as React from "react";
-import { View } from "../components/themed/Themed";
-import MyText from "../components/MyText";
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { useDispatch } from "react-redux";
+import { View } from "../components/themed/Themed";
+import MyText from "../components/MyText";
 import { setUser } from "../features/user";
 import { setChatRooms } from "../features/chatRooms";
 import { getUser } from "../graphql/queries";

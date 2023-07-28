@@ -9,7 +9,7 @@ export default function ForgotPassword() {
     React.useContext(AuthContext);
 
   return (
-    <React.Fragment>
+    <>
       <MyText type="title" style={{ marginBottom: 5 }}>
         Forgot Password
       </MyText>
@@ -20,7 +20,7 @@ export default function ForgotPassword() {
       <MyInput label="Email" onChangeText={setEmail} />
       <MyButton
         title={isLoading ? "Sending Code..." : "Send Code"}
-        disabled={isLoading ? true : false}
+        disabled={!!isLoading}
         style={{ marginTop: 20 }}
         onPress={handleForgotPassword}
       />
@@ -29,6 +29,6 @@ export default function ForgotPassword() {
         title="Back to Login"
         onPress={() => setAuthState("signIn")}
       />
-    </React.Fragment>
+    </>
   );
 }

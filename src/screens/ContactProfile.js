@@ -1,8 +1,6 @@
 import * as React from "react";
-import MyText from "../components/MyText";
 import { useRoute } from "@react-navigation/native";
 import { API, graphqlOperation } from "aws-amplify";
-import { getUser } from "../graphql/queries";
 import {
   Pressable,
   Dimensions,
@@ -13,10 +11,12 @@ import {
   Linking,
   Alert,
 } from "react-native";
-import { ScrollView } from "../components/themed/Themed";
 import MapView, { Marker } from "react-native-maps";
-import Colors from "../../constants/colors";
 import moment from "moment";
+import { getUser } from "../graphql/queries";
+import { ScrollView } from "../components/themed/Themed";
+import Colors from "../../constants/colors";
+import MyText from "../components/MyText";
 
 export default function ContactProfile() {
   const [contact, setContact] = React.useState();
@@ -53,9 +53,9 @@ export default function ContactProfile() {
 
   const sendReportEmail = async () => {
     const url = `mailto:${"codewithbeto.dev@gmail.com"}?subject=Report&body=${
-      "This is an automatic email to the Code With Beto Reporting team. Please write any concerns above this paragraph and do not delete anything below. " +
-      "User ID: " +
-      contact.id
+      `This is an automatic email to the Code With Beto Reporting team. Please write any concerns above this paragraph and do not delete anything below. ` +
+      `User ID: ${ 
+      contact.id}`
     }`;
     await Linking.openURL(url);
     alert("Thank you for your report. We will review it as soon as possible.");
@@ -111,11 +111,11 @@ export default function ContactProfile() {
         style={{
           fontWeight: "600",
           textAlign: "center",
-          color: Colors[theme].text + "70",
+          color: `${Colors[theme].text  }70`,
         }}
       >
         {contact.status
-          ? '"' + contact.status + '"'
+          ? `"${  contact.status  }"`
           : '"Learn to create this app 👉🏼 codewithbeto.dev"'}
       </MyText>
 
@@ -123,15 +123,15 @@ export default function ContactProfile() {
         type="caption"
         style={{
           fontWeight: "600",
-          color: Colors[theme].text + "40",
+          color: `${Colors[theme].text  }40`,
           marginTop: 26,
         }}
       >
         INFORMATION
       </MyText>
-      <InfoField label={"Email"} value={contact.email} theme={theme} />
+      <InfoField label="Email" value={contact.email} theme={theme} />
       <InfoField
-        label={"Member since"}
+        label="Member since"
         value={moment(contact.createdAt).fromNow()}
         theme={theme}
       />
@@ -139,7 +139,7 @@ export default function ContactProfile() {
         style={{ height: Dimensions.get("window").height < 700 ? 30 : 80 }}
       />
       <InfoField
-        label={"Report Contact"}
+        label="Report Contact"
         theme={theme}
         onPress={handleReport}
         danger
@@ -160,14 +160,14 @@ function InfoField({ label, value, onPress, theme, danger }) {
       onPress={onPress}
       style={[
         styles.infoContainer,
-        { borderBottomColor: Colors[theme].text + "80" },
+        { borderBottomColor: `${Colors[theme].text  }80` },
       ]}
     >
       <MyText
         type="caption"
         style={{
           fontWeight: "500",
-          color: danger ? Colors[theme].red : Colors[theme].text + "80",
+          color: danger ? Colors[theme].red : `${Colors[theme].text  }80`,
           paddingRight: 10,
         }}
       >

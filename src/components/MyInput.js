@@ -5,7 +5,7 @@ import {
   StyleSheet,
   useColorScheme,
 } from "react-native";
-import MyText from "../components/MyText";
+import MyText from "./MyText";
 import Colors from "../../constants/colors";
 
 export default function MyInput({
@@ -47,13 +47,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   dark: {
-    backgroundColor: Colors.dark.text + "06",
-    borderColor: Colors.dark.text + "80",
+    backgroundColor: `${Colors.dark.text  }06`,
+    borderColor: `${Colors.dark.text  }80`,
     color: Colors.dark.text,
   },
   light: {
-    backgroundColor: Colors.light.text + "06",
-    borderColor: Colors.light.text + "80",
+    backgroundColor: `${Colors.light.text  }06`,
+    borderColor: `${Colors.light.text  }80`,
     color: Colors.light.text,
   },
 });

@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { View } from "../components/themed/Themed";
 import { FlashList } from "@shopify/flash-list";
-import ListHeader from "../components/ListHeader";
 import { useSelector, useDispatch } from "react-redux";
+import { API, graphqlOperation } from "aws-amplify";
+import { View } from "../components/themed/Themed";
+import ListHeader from "../components/ListHeader";
 import ChatRoomCard from "../components/ChatRoomCard";
 import { onCreateChatRoom } from "../graphql/subscriptions";
-import { API, graphqlOperation } from "aws-amplify";
 import { setChatRooms } from "../features/chatRooms";
 import { getUserByID } from "../utils/userOperations";
 
@@ -46,7 +46,7 @@ export default function Chats() {
         estimatedItemSize={200}
         ListHeaderComponent={() => (
           <ListHeader
-            title={"Chats"}
+            title="Chats"
             iconName="add-circle-sharp"
             handleNavigation={() => navigation.navigate("NewChat")}
           />

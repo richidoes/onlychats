@@ -6,10 +6,11 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import Onboarding from "../screens/Onboarding";
-import { Ionicons } from "@expo/vector-icons";
 import Chats from "../screens/Chats";
 import NewPost from "../screens/NewPost";
 import ChatRoom from "../screens/ChatRoom";
@@ -17,7 +18,6 @@ import ContactProfile from "../screens/ContactProfile";
 import NewChat from "../screens/NewChat";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import ShowPost from "../screens/ShowPost";
-import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

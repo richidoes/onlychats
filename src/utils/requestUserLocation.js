@@ -3,7 +3,7 @@ import { Alert, Linking } from "react-native";
 import { startActivityAsync, ActivityAction } from "expo-intent-launcher";
 
 export async function requestLocationPermissions() {
-  let { status } = await Location.requestForegroundPermissionsAsync();
+  const { status } = await Location.requestForegroundPermissionsAsync();
   if (status !== "granted") {
     Alert.alert(
       "Location permission denied",
@@ -23,7 +23,7 @@ export async function requestLocationPermissions() {
               // Open location settings android
               startActivityAsync(ActivityAction.LOCATION_SOURCE_SETTINGS);
             } else {
-              return;
+              
             }
           },
           style: "default",
@@ -33,8 +33,8 @@ export async function requestLocationPermissions() {
     return null;
   }
   const loc = await Location.getCurrentPositionAsync({});
-  const latitude = loc.coords.latitude;
-  const longitude = loc.coords.longitude;
+  const {latitude} = loc.coords;
+  const {longitude} = loc.coords;
 
   return {
     latitude,

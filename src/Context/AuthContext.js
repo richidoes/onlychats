@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Auth, API, graphqlOperation } from "aws-amplify";
-import { createUser } from "../graphql/mutations";
 import { useDispatch } from "react-redux";
+import { createUser } from "../graphql/mutations";
 import { setUser } from "../features/user";
 import { getUser } from "../graphql/queries";
 import { setChatRooms } from "../features/chatRooms";

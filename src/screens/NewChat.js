@@ -1,10 +1,11 @@
 import * as React from "react";
+import { Alert, StyleSheet } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import { View } from "../components/themed/Themed";
 import MyText from "../components/MyText";
 import MyInput from "../components/MyInput";
-import { Alert, StyleSheet } from "react-native";
 import MyButton from "../components/MyButton";
-import { useSelector, useDispatch } from "react-redux";
 import { setChatRooms } from "../features/chatRooms";
 import {
   getUserByEmail,
@@ -16,7 +17,6 @@ import {
   sendPushNotification,
   createNotificationOnDB,
 } from "../utils/notifications";
-import { useNavigation } from "@react-navigation/native";
 
 export default function NewChat() {
   const user = useSelector((state) => state.user);
@@ -71,7 +71,7 @@ export default function NewChat() {
         contact.notificationToken,
         "🚨 New conversation started!",
         `${
-          user.firstName + " " + user.lastName
+          `${user.firstName  } ${  user.lastName}`
         } started a conversation with you`,
         notificationData
       );

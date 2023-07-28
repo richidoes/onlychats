@@ -1,11 +1,11 @@
 import * as React from "react";
-import MyText from "../components/MyText";
-import { View } from "../components/themed/Themed";
-import MyButton from "../components/MyButton";
 import { Image, StyleSheet, View as DefaultView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
+import MyButton from "../components/MyButton";
+import { View } from "../components/themed/Themed";
+import MyText from "../components/MyText";
 import { resetNotificationToken } from "../features/user";
 import { registerForPushNotificationsAsync } from "../utils/registerForPushNotificationsAsync";
 import { updateUserNotificationToken } from "../utils/userOperations";

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Button, Platform, StatusBar } from "react-native";
-import { View } from "../components/themed/Themed";
 import { FlashList } from "@shopify/flash-list";
-import ListHeader from "../components/ListHeader";
 import { useDispatch, useSelector } from "react-redux";
+import { View } from "../components/themed/Themed";
+import ListHeader from "../components/ListHeader";
 import {
   loadMoreNotifications,
   setNotifications,
@@ -64,7 +64,7 @@ export default function NotificationsScreen() {
         renderItem={({ item }) => <NotificationCard {...item} />}
         contentContainerStyle={Platform.OS === "ios" && { paddingVertical: 30 }}
         estimatedItemSize={200}
-        ListHeaderComponent={() => <ListHeader title={"Notifications"} />}
+        ListHeaderComponent={() => <ListHeader title="Notifications" />}
         ListFooterComponent={() => (
           <Button
             onPress={fetchMoreNotifications}

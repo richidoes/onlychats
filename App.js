@@ -1,15 +1,15 @@
-import * as React from "react";
-import { useColorScheme } from "react-native";
-import { Amplify, Auth, Hub, API, graphqlOperation } from "aws-amplify";
-import awsconfig from "./src/aws-exports";
-import Root from "./src/navigation/Root";
-import Splash from "./src/screens/Splash";
-import AuthScreen from "./src/screens/Auth";
-import { Provider, useSelector, useDispatch } from "react-redux";
-import { setUser, resetUser } from "./src/features/user";
-import { store } from "./src/app/store";
-import { getUser } from "./src/graphql/queries";
-import { setNotificationHandler } from "expo-notifications";
+import * as React from 'react';
+import { useColorScheme } from 'react-native';
+import { Amplify, Hub, API, graphqlOperation } from 'aws-amplify';
+import { Provider, useSelector, useDispatch } from 'react-redux';
+import { setNotificationHandler } from 'expo-notifications';
+import awsconfig from './src/aws-exports';
+import Root from './src/navigation/Root';
+import Splash from './src/screens/Splash';
+import AuthScreen from './src/screens/Auth';
+import { setUser, resetUser } from './src/features/user';
+import { store } from './src/app/store';
+import { getUser } from './src/graphql/queries';
 
 setNotificationHandler({
   handleNotification: async () => ({
@@ -30,37 +30,33 @@ export default function Wrapper() {
 }
 
 function App() {
-  // const [user, setUser] = React.useState(null);
-  const user = useSelector((state) => state.user);
+  const user = useSelector(state => state.user);
   const [isLoading, setIsLoading] = React.useState(true);
   const colorScheme = useColorScheme();
   const dispatch = useDispatch();
 
-  const listener = async (data) => {
+  const listener = async data => {
     switch (data.payload.event) {
-      case "signIn":
-        const user = await API.graphql(
+      case 'signIn':
+        const userFromDB = await API.graphql(
           graphqlOperation(getUser, { id: data.payload.data.attributes.sub })
         );
         dispatch(
           setUser({
-            id: user.data.getUser.id,
-            firstName: user.data.getUser.firstName,
-            lastName: user.data.getUser.lastName,
-            profilePicture: user.data.getUser.profilePicture,
-            email: user.data.getUser.email.toLowerCase(),
-            status: user.data.getUser.status,
-            notificationToken: user.data.getUser.notificationToken,
+            id: userFromDB.data.getUser.id,
+            firstName: userFromDB.data.getUser.firstName,
+            lastName: userFromDB.data.getUser.lastName,
+            profilePicture: userFromDB.data.getUser.profilePicture,
+            email: userFromDB.data.getUser.email.toLowerCase(),
+            status: userFromDB.data.getUser.status,
+            notificationToken: userFromDB.data.getUser.notificationToken,
+            latitude: userFromDB.data.getUser.latitude,
+            longitude: userFromDB.data.getUser.longitude,
           })
         );
-        // console.log("lisener", data.payload);
-        // setUser({ sub: data.payload.email, email: data.payload.email });
-        console.log("user signed in");
         break;
-      case "signOut":
-        // setUser(null);
+      case 'signOut':
         dispatch(resetUser());
-        console.log("user signed out");
         break;
       default:
         break;
@@ -68,7 +64,7 @@ function App() {
   };
 
   React.useEffect(() => {
-    Hub.listen("auth", listener);
+    Hub.listen('auth', listener);
   }, []);
 
   if (isLoading) return <Splash setIsLoading={setIsLoading} />;

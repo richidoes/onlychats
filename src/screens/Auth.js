@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useColorScheme, Image, StatusBar } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { View } from "../components/themed/Themed";
 import SignIn from "../components/SignIn";
 import ForgotPassword from "../components/ForgotPassword";
@@ -6,8 +8,6 @@ import ConfirmForgotPassword from "../components/ConfirmForgotPassword";
 import SignUp from "../components/SignUp";
 import ConfirmSignUp from "../components/ConfirmSignUp";
 import { AuthProvider, AuthContext } from "../Context/AuthContext";
-import { useColorScheme, Image, StatusBar } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Colors from "../../constants/colors";
 import DefaultAuth from "../components/DefaultAuth";
 

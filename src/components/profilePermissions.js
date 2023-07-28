@@ -7,9 +7,11 @@ import {
   Alert,
   Pressable,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { isDevice } from "expo-device";
+import { Auth } from "aws-amplify";
 import MyText from "./MyText";
 import Colors from "../../constants/colors";
-import { useSelector, useDispatch } from "react-redux";
 import {
   deleteUser,
   updateUserLocation,
@@ -22,8 +24,6 @@ import {
   resetLocation,
   resetUser,
 } from "../features/user";
-import { isDevice } from "expo-device";
-import { Auth } from "aws-amplify";
 
 export default function ProfilePermissions() {
   const user = useSelector((state) => state.user);
@@ -98,34 +98,34 @@ export default function ProfilePermissions() {
     <View>
       <MyText
         type="caption"
-        style={{ fontWeight: "600", color: Colors[theme].text + "40" }}
+        style={{ fontWeight: "600", color: `${Colors[theme].text  }40` }}
       >
         PERMISSIONS
       </MyText>
       <InfoField
         theme={theme}
-        label={"Notifications"}
-        value={user.notificationToken ? true : false}
+        label="Notifications"
+        value={!!user.notificationToken}
         handleUpdate={handleToggleNotifications}
       />
       <InfoField
         theme={theme}
-        label={"Location"}
-        value={user.latitude ? true : false}
+        label="Location"
+        value={!!user.latitude}
         handleUpdate={handleToggleLocation}
       />
       <Pressable
         onPress={handleSignOut}
         style={[
           styles.fieldContainer,
-          { borderBottomColor: Colors[theme].text + "80", paddingVertical: 22 },
+          { borderBottomColor: `${Colors[theme].text  }80`, paddingVertical: 22 },
         ]}
       >
         <MyText
           type="caption"
           style={{
             fontWeight: "500",
-            color: Colors[theme].text + "80",
+            color: `${Colors[theme].text  }80`,
             paddingRight: 10,
           }}
         >
@@ -136,7 +136,7 @@ export default function ProfilePermissions() {
         onPress={handleDeleteAccount}
         style={[
           styles.fieldContainer,
-          { borderBottomColor: Colors[theme].text + "80", paddingVertical: 22 },
+          { borderBottomColor: `${Colors[theme].text  }80`, paddingVertical: 22 },
         ]}
       >
         <MyText
@@ -159,14 +159,14 @@ function InfoField({ label, value, theme, handleUpdate }) {
     <View
       style={[
         styles.fieldContainer,
-        { borderBottomColor: Colors[theme].text + "80" },
+        { borderBottomColor: `${Colors[theme].text  }80` },
       ]}
     >
       <MyText
         type="caption"
         style={{
           fontWeight: "500",
-          color: Colors[theme].text + "80",
+          color: `${Colors[theme].text  }80`,
           paddingRight: 10,
         }}
       >

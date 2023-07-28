@@ -1,9 +1,9 @@
 import * as React from "react";
 import { View, Pressable, StyleSheet, Image } from "react-native";
-import MyText from "../components/MyText";
 import { useSelector, useDispatch } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { CLOUD_NAME, UPLOAD_PRESET } from "@env";
+import MyText from "./MyText";
 import { resetProfilePicture } from "../features/user";
 import { updateUserPicture } from "../utils/userOperations";
 
@@ -21,7 +21,7 @@ export default function ProfilePicture() {
   const dispatch = useDispatch();
 
   const pickeImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
@@ -29,7 +29,7 @@ export default function ProfilePicture() {
       base64: true,
     });
 
-    let base64Img = `data:image/jpg;base64,${result.base64}`;
+    const base64Img = `data:image/jpg;base64,${result.base64}`;
     const data = new FormData();
     data.append("file", base64Img);
     data.append("upload_preset", UPLOAD_PRESET);
@@ -40,7 +40,7 @@ export default function ProfilePicture() {
   };
 
   const savePhotoInCloudinary = async (data) => {
-    let apiUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload/`;
+    const apiUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload/`;
     try {
       const response = await fetch(apiUrl, {
         method: "POST",

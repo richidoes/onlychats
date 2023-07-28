@@ -1,8 +1,8 @@
 import * as React from "react";
+import { Button } from "react-native";
 import MyInput from "./MyInput";
 import MyButton from "./MyButton";
 import MyText from "./MyText";
-import { Button } from "react-native";
 import { AuthContext } from "../Context/AuthContext";
 
 export default function SignUp() {
@@ -16,7 +16,7 @@ export default function SignUp() {
     setConfirmPassword,
   } = React.useContext(AuthContext);
   return (
-    <React.Fragment>
+    <>
       <MyText type="title" style={{ marginBottom: 35 }}>
         Join the amazing community
       </MyText>
@@ -35,6 +35,6 @@ export default function SignUp() {
         type="secondary"
         onPress={() => setAuthState("signIn")}
       />
-    </React.Fragment>
+    </>
   );
 }
