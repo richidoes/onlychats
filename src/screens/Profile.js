@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useColorScheme, StatusBar } from "react-native";
 import { ScrollView } from "../components/themed/Themed";
 import ProfilePicture from "../components/profilePicture";
+import { useColorScheme, StatusBar } from "react-native";
 import ProfileInformation from "../components/profileInformation";
 import ProfilePermissions from "../components/profilePermissions";
 

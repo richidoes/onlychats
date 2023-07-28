@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API, graphqlOperation } from 'aws-amplify';
 import { FlashList } from '@shopify/flash-list';
-import { Alert, Button, Platform } from 'react-native';
+import { Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Notifications from 'expo-notifications';
 import { postsByDate } from '../graphql/queries';
@@ -11,6 +11,7 @@ import ListHeader from '../components/ListHeader';
 import PostCard from '../components/PostCard';
 import { setPostsReducer, loadMorePostReducer } from '../features/posts';
 import { View } from '../components/themed/Themed';
+import MyText from '../components/MyText';
 
 export default function Home() {
   const navigation = useNavigation();
@@ -65,6 +66,7 @@ export default function Home() {
     dispatch(setPostsReducer(data.postsByDate.items));
     setNextToken(data.postsByDate.nextToken);
     setIsLoading(false);
+    // console.log(data.postsByDate.nextToken);
   }
 
   async function fetchMorePost() {
@@ -81,12 +83,14 @@ export default function Home() {
       dispatch(loadMorePostReducer(data.postsByDate.items));
       setNextToken(data.postsByDate.nextToken);
       if (data.postsByDate.nextToken === null) {
-        Alert.alert('No more posts to load 🤯');
+        alert('No more posts to load 🤯');
       }
       setIsLoading(false);
     } else {
       setIsLoading(false);
     }
+
+    // console.log(data.postsByDate.items);
   }
 
   return (

@@ -71,6 +71,7 @@ export default function PostCard(post) {
       return Alert.alert('Report Post', 'Would you like to report this post?', [
         {
           text: 'Cancel',
+          onPress: () => console.log('canceled'),
           style: 'cancel',
         },
         {
@@ -90,6 +91,7 @@ export default function PostCard(post) {
     return Alert.alert('Delete Post', 'Would you like to delete this post?', [
       {
         text: 'Cancel',
+        onPress: () => console.log('canceled'),
         style: 'cancel',
       },
       {

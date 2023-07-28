@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   id: null,
@@ -13,35 +13,62 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUser: (state, action) => {
-      return action.payload;
+      return (state = action.payload);
     },
-    resetUser: () => {
-      return initialState;
+    resetUser: (state) => {
+      return (state = {
+        id: null,
+        firstName: null,
+        lastName: null,
+        profilePicture: null,
+        email: null,
+        status: null,
+        notificationToken: null,
+        latitude: null,
+        longitude: null,
+      });
     },
     resetProfilePicture: (state, action) => {
-      state.profilePicture = action.payload;
+      return {
+        ...state,
+        profilePicture: action.payload,
+      };
     },
     resetFirstName: (state, action) => {
-      state.firstName = action.payload;
+      return {
+        ...state,
+        firstName: action.payload,
+      };
     },
-    resetLastName: (state, action) => {
-      state.lastName = action.payload;
+    resetlastName: (state, action) => {
+      return {
+        ...state,
+        lastName: action.payload,
+      };
     },
     resetStatus: (state, action) => {
-      state.status = action.payload;
+      return {
+        ...state,
+        status: action.payload,
+      };
     },
     resetNotificationToken: (state, action) => {
-      state.notificationToken = action.payload;
+      return {
+        ...state,
+        notificationToken: action.payload,
+      };
     },
     resetLocation: (state, action) => {
       const { latitude, longitude } = action.payload;
-
-      state.latitude = latitude;
-      state.longitude = longitude;
+      return {
+        ...state,
+        latitude: latitude,
+        longitude: longitude,
+      };
     },
   },
 });
@@ -52,7 +79,7 @@ export const {
   resetProfilePicture,
   resetFirstName,
   resetStatus,
-  resetLastName,
+  resetlastName,
   resetLocation,
   resetNotificationToken,
 } = userSlice.actions;

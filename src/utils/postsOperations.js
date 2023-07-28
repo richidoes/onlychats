@@ -1,12 +1,11 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from "aws-amplify";
 import {
   deletePost as deletePostMutation,
   createPost as createPostMutation,
   updatePost,
-} from '../graphql/mutations';
+} from "../graphql/mutations";
 
 export const createPost = async (authorID, postContent) => {
-  let post = {};
   try {
     const newPost = await API.graphql({
       query: createPostMutation,
@@ -19,16 +18,14 @@ export const createPost = async (authorID, postContent) => {
         },
       },
     });
-
-    post = newPost;
+    console.log("post created success");
+    return newPost;
   } catch (e) {
-    console.log('Error creating post', e);
+    console.log(e, "error creating post");
   }
-
-  return post;
 };
 
-export const deletePost = async postID => {
+export const deletePost = async (postID) => {
   try {
     await API.graphql({
       query: deletePostMutation,
@@ -38,8 +35,9 @@ export const deletePost = async postID => {
         },
       },
     });
+    console.log("post deleted successfully");
   } catch (e) {
-    console.log('Error deleting post', e);
+    console.log("error deleting post");
   }
 };
 
@@ -59,8 +57,9 @@ export const incrementLikesMutation = async (
         },
       })
     );
+    console.log("post liked successfully");
   } catch (e) {
-    console.log('Error liking post', e);
+    console.log("error liking post");
   }
 };
 
@@ -75,12 +74,13 @@ export const decrementLikesMutation = async (
       graphqlOperation(updatePost, {
         input: {
           id: postID,
-          likedBy: likedBy.filter(id => id !== userID),
+          likedBy: likedBy.filter((id) => id !== userID),
           numberOfLikes: numberOfLikes - 1,
         },
       })
     );
+    console.log("post disliked successfully");
   } catch (e) {
-    console.log('Error disliking post', e);
+    console.log("error disliking post");
   }
 };

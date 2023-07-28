@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   View,
   useColorScheme,
@@ -6,28 +6,27 @@ import {
   Switch,
   Alert,
   Pressable,
-} from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { isDevice } from 'expo-device';
-import { Auth } from 'aws-amplify';
-import { func, string } from 'prop-types';
-import MyText from './MyText';
-import Colors from '../../constants/colors';
+} from "react-native";
+import MyText from "./MyText";
+import Colors from "../../constants/colors";
+import { useSelector, useDispatch } from "react-redux";
 import {
   deleteUser,
   updateUserLocation,
   updateUserNotificationToken,
-} from '../utils/userOperations';
-import { registerForPushNotificationsAsync } from '../utils/registerForPushNotificationsAsync';
-import { requestLocationPermissions } from '../utils/requestUserLocation';
+} from "../utils/userOperations";
+import { registerForPushNotificationsAsync } from "../utils/registerForPushNotificationsAsync";
+import { requestLocationPermissions } from "../utils/requestUserLocation";
 import {
   resetNotificationToken,
   resetLocation,
   resetUser,
-} from '../features/user';
+} from "../features/user";
+import { isDevice } from "expo-device";
+import { Auth } from "aws-amplify";
 
 export default function ProfilePermissions() {
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
   const theme = useColorScheme();
   const dispatch = useDispatch();
 
@@ -51,13 +50,14 @@ export default function ProfilePermissions() {
         if (token !== null) {
           await updateUserNotificationToken(user.id, token);
           dispatch(resetNotificationToken(token));
+          console.log(token);
         }
       } else {
         await updateUserNotificationToken(user.id, null);
         dispatch(resetNotificationToken(null));
       }
     } else {
-      Alert.alert('this do not work on a simulator ⚠️');
+      alert("this do not work on a simulator");
     }
   }
 
@@ -66,28 +66,29 @@ export default function ProfilePermissions() {
       await Auth.signOut();
       dispatch(resetUser());
     } catch (e) {
-      Alert.alert('Error while signing out', e);
+      console.log(e);
     }
   }
 
   async function handleDeleteAccount() {
     Alert.alert(
-      'Delete Account',
+      "Delete Account",
       "Your information will be permanently deleted, you can't revert this action",
       [
         {
-          text: 'Cancel',
-          style: 'cancel',
+          text: "Cancel",
+          onPress: () => console.log("cancel pressed"),
+          style: "cancel",
         },
         {
-          text: 'Delete Account',
+          text: "Delete Account",
           onPress: async () => {
             await deleteUser(user.id);
             await Auth.deleteUser();
             dispatch(resetUser());
-            Alert.alert('Account deleted successfully');
+            console.log("account deleted successfully");
           },
-          style: 'destructive',
+          style: "destructive",
         },
       ]
     );
@@ -97,34 +98,34 @@ export default function ProfilePermissions() {
     <View>
       <MyText
         type="caption"
-        style={{ fontWeight: '600', color: `${Colors[theme].text}40` }}
+        style={{ fontWeight: "600", color: Colors[theme].text + "40" }}
       >
         PERMISSIONS
       </MyText>
       <InfoField
         theme={theme}
-        label="Notifications"
-        value={!!user.notificationToken}
+        label={"Notifications"}
+        value={user.notificationToken ? true : false}
         handleUpdate={handleToggleNotifications}
       />
       <InfoField
         theme={theme}
-        label="Location"
-        value={!!user.latitude}
+        label={"Location"}
+        value={user.latitude ? true : false}
         handleUpdate={handleToggleLocation}
       />
       <Pressable
         onPress={handleSignOut}
         style={[
           styles.fieldContainer,
-          { borderBottomColor: `${Colors[theme].text}80`, paddingVertical: 22 },
+          { borderBottomColor: Colors[theme].text + "80", paddingVertical: 22 },
         ]}
       >
         <MyText
           type="caption"
           style={{
-            fontWeight: '500',
-            color: `${Colors[theme].text}80`,
+            fontWeight: "500",
+            color: Colors[theme].text + "80",
             paddingRight: 10,
           }}
         >
@@ -135,13 +136,13 @@ export default function ProfilePermissions() {
         onPress={handleDeleteAccount}
         style={[
           styles.fieldContainer,
-          { borderBottomColor: `${Colors[theme].text}80`, paddingVertical: 22 },
+          { borderBottomColor: Colors[theme].text + "80", paddingVertical: 22 },
         ]}
       >
         <MyText
           type="caption"
           style={{
-            fontWeight: '500',
+            fontWeight: "500",
             color: Colors[theme].red,
             paddingRight: 10,
           }}
@@ -158,14 +159,14 @@ function InfoField({ label, value, theme, handleUpdate }) {
     <View
       style={[
         styles.fieldContainer,
-        { borderBottomColor: `${Colors[theme].text}80` },
+        { borderBottomColor: Colors[theme].text + "80" },
       ]}
     >
       <MyText
         type="caption"
         style={{
-          fontWeight: '500',
-          color: `${Colors[theme].text}80`,
+          fontWeight: "500",
+          color: Colors[theme].text + "80",
           paddingRight: 10,
         }}
       >
@@ -178,17 +179,10 @@ function InfoField({ label, value, theme, handleUpdate }) {
 
 const styles = StyleSheet.create({
   fieldContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderBottomWidth: StyleSheet.hairlineWidth,
     paddingVertical: 15,
   },
 });
-
-InfoField.propTypes = {
-  label: string,
-  value: string,
-  theme: string,
-  handleUpdate: func,
-};

@@ -6,11 +6,9 @@ import {
   Image,
   Pressable,
   useColorScheme,
-  Alert,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
-import { string } from 'prop-types';
 import Colors from '../../constants/colors';
 import { createMessage, updateChatRoom } from '../graphql/mutations';
 
@@ -39,10 +37,11 @@ export default function ChatInput({ chatRoomId, contactToken }) {
           },
         })
       );
+      console.log('message sent and chatRoom updated');
       setText('');
       await sendPushNotification();
     } catch (e) {
-      Alert.alert('Error sending message', e);
+      console.log(e);
     }
   }
 
@@ -80,7 +79,7 @@ export default function ChatInput({ chatRoomId, contactToken }) {
             backgroundColor: theme === 'dark' ? '#000' : '#fff',
           },
         ]}
-        placeholder=""
+        placeholder="Go to codewithbeto.dev :)"
         placeholderTextColor="gray"
         scrollEnabled
         textAlign="left"
@@ -142,8 +141,3 @@ const styles = StyleSheet.create({
     height: 28,
   },
 });
-
-ChatInput.propTypes = {
-  chatRoomId: string,
-  contactToken: string,
-};

@@ -1,7 +1,12 @@
-import { TextInput, View, StyleSheet, useColorScheme } from 'react-native';
-import { bool, func, string } from 'prop-types';
-import MyText from './MyText';
-import Colors from '../../constants/colors';
+import {
+  TextInput,
+  Text,
+  View,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
+import MyText from "../components/MyText";
+import Colors from "../../constants/colors";
 
 export default function MyInput({
   label,
@@ -14,7 +19,7 @@ export default function MyInput({
   return (
     <View style={styles.container}>
       {!hiddenLabel && (
-        <MyText style={{ fontWeight: 'bold', marginBottom: 10 }} type="caption">
+        <MyText style={{ fontWeight: "bold", marginBottom: 10 }} type="caption">
           {label}
         </MyText>
       )}
@@ -34,29 +39,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingLeft: 10,
     borderRadius: 8,
     borderWidth: 1,
   },
   dark: {
-    backgroundColor: `${Colors.dark.text}06`,
-    borderColor: `${Colors.dark.text}80`,
+    backgroundColor: Colors.dark.text + "06",
+    borderColor: Colors.dark.text + "80",
     color: Colors.dark.text,
   },
   light: {
-    backgroundColor: `${Colors.light.text}06`,
-    borderColor: `${Colors.light.text}80`,
+    backgroundColor: Colors.light.text + "06",
+    borderColor: Colors.light.text + "80",
     color: Colors.light.text,
   },
 });
-
-MyInput.propTypes = {
-  label: string,
-  value: string,
-  onChangeText: func,
-  secureTextEntry: bool,
-  hiddenLabel: bool,
-};

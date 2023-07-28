@@ -7,12 +7,11 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { API } from 'aws-amplify';
-import { object } from 'prop-types';
 import Colors from '../../constants/colors';
 import MyText from './MyText';
 import { deleteNotification, updateNotification } from '../graphql/mutations';
@@ -21,7 +20,8 @@ import {
   markNotificationAsSeen,
 } from '../features/notifications';
 
-export default function NotificationCard({ notification }) {
+export default function NotificationCard(notification) {
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { sender } = notification;
@@ -172,7 +172,3 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
-
-NotificationCard.propTypes = {
-  notification: object,
-};

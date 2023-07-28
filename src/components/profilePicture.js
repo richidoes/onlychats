@@ -1,12 +1,11 @@
-import * as React from 'react';
-import { View, Pressable, StyleSheet, Image, Alert } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import * as ImagePicker from 'expo-image-picker';
-import { CLOUD_NAME, UPLOAD_PRESET } from '@env';
-import { string } from 'prop-types';
-import MyText from './MyText';
-import { resetProfilePicture } from '../features/user';
-import { updateUserPicture } from '../utils/userOperations';
+import * as React from "react";
+import { View, Pressable, StyleSheet, Image } from "react-native";
+import MyText from "../components/MyText";
+import { useSelector, useDispatch } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import { CLOUD_NAME, UPLOAD_PRESET } from "@env";
+import { resetProfilePicture } from "../features/user";
+import { updateUserPicture } from "../utils/userOperations";
 
 function ProfileFallback({ firstName }) {
   return (
@@ -17,29 +16,12 @@ function ProfileFallback({ firstName }) {
 }
 
 export default function ProfilePicture() {
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
   const { firstName, lastName, profilePicture, id } = user;
   const dispatch = useDispatch();
 
-  const savePhotoInCloudinary = async data => {
-    const apiUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload/`;
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: data,
-      });
-      const json = await response.json();
-      // save to db
-      await updateUserPicture(id, json.url);
-      // set image to redux
-      dispatch(resetProfilePicture(json.url));
-    } catch (e) {
-      Alert.alert('Error updating user photo', e);
-    }
-  };
-
-  const handleSelectImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
+  const pickeImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
@@ -47,26 +29,60 @@ export default function ProfilePicture() {
       base64: true,
     });
 
-    const base64Img = `data:image/jpg;base64,${result.base64}`;
+    let base64Img = `data:image/jpg;base64,${result.base64}`;
     const data = new FormData();
-    data.append('file', base64Img);
-    data.append('upload_preset', UPLOAD_PRESET);
+    data.append("file", base64Img);
+    data.append("upload_preset", UPLOAD_PRESET);
 
-    if (!result.canceled) {
+    if (!result.cancelled) {
       savePhotoInCloudinary(data);
     }
   };
 
+  const savePhotoInCloudinary = async (data) => {
+    let apiUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload/`;
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: data,
+      });
+      const json = await response.json();
+      // save to db
+      await updateUserPicture(id, json.url);
+      // set image to redux
+      dispatch(resetProfilePicture(json.url));
+      console.log("image save to db and cloudinary", json.url);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // const updateUserPicture = async (newPhoto) => {
+  //   try {
+  //     await API.graphql({
+  //       query: updateUser,
+  //       variables: {
+  //         input: {
+  //           id: id,
+  //           profilePicture: newPhoto,
+  //         },
+  //       },
+  //     });
+  //   } catch (e) {
+  //     console.log("error updating user photo");
+  //   }
+  // };
+
   return (
     <View style={styles.container}>
-      <Pressable onPress={handleSelectImage}>
+      <Pressable onPress={pickeImage}>
         {profilePicture ? (
           <Image source={{ uri: profilePicture }} style={styles.image} />
         ) : (
           <ProfileFallback firstName={firstName} />
         )}
       </Pressable>
-      <MyText style={{ fontWeight: 'bold' }}>
+      <MyText style={{ fontWeight: "bold" }}>
         {firstName} {lastName}
       </MyText>
     </View>
@@ -76,10 +92,10 @@ export default function ProfilePicture() {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   fallback: {
-    backgroundColor: 'lightcoral',
+    backgroundColor: "lightcoral",
     width: 100,
     height: 100,
     borderRadius: 50,
@@ -94,11 +110,7 @@ const styles = StyleSheet.create({
   initialLetter: {
     fontSize: 60,
     lineHeight: 100,
-    textAlign: 'center',
-    color: 'white',
+    textAlign: "center",
+    color: "white",
   },
 });
-
-ProfileFallback.propTypes = {
-  firstName: string,
-};
