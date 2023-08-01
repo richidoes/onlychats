@@ -1,10 +1,10 @@
-import * as React from "react";
-import { useRoute } from "@react-navigation/native";
-import { API, graphqlOperation } from "aws-amplify";
-import MyText from "../components/MyText";
-import { View } from "../components/themed/Themed";
-import { getPost } from "../graphql/queries";
-import PostCard from "../components/PostCard";
+import * as React from 'react';
+import { useRoute } from '@react-navigation/native';
+import { API, graphqlOperation } from 'aws-amplify';
+import MyText from '../components/MyText';
+import { ThemedView } from '../components/Themed';
+import { getPost } from '../graphql/queries';
+import PostCard from '../components/PostCard';
 
 export default function ShowPost() {
   const route = useRoute();
@@ -25,8 +25,8 @@ export default function ShowPost() {
   }
   if (post === undefined) return;
   return (
-    <View style={{ flex: 1, paddingHorizontal: 0 }}>
-      <PostCard {...post} />
-    </View>
+    <ThemedView style={{ flex: 1, paddingHorizontal: 0 }}>
+      <PostCard post={post} />
+    </ThemedView>
   );
 }

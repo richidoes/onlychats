@@ -10,7 +10,7 @@ import { postsByDate } from '../graphql/queries';
 import ListHeader from '../components/ListHeader';
 import PostCard from '../components/PostCard';
 import { setPostsReducer, loadMorePostReducer } from '../features/posts';
-import { View } from '../components/themed/Themed';
+import { ThemedView } from '../components/Themed';
 import MyText from '../components/MyText';
 
 export default function Home() {
@@ -94,10 +94,10 @@ export default function Home() {
   }
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: 0 }}>
+    <ThemedView style={{ flex: 1, paddingHorizontal: 0 }}>
       <FlashList
         data={posts}
-        renderItem={({ item }) => <PostCard {...item} />}
+        renderItem={({ item }) => <PostCard post={item} />}
         contentContainerStyle={Platform.OS === 'ios' && { paddingVertical: 30 }}
         estimatedItemSize={200}
         ListHeaderComponent={() => (
@@ -117,6 +117,6 @@ export default function Home() {
         refreshing={isLoading}
         onRefresh={fetchPost}
       />
-    </View>
+    </ThemedView>
   );
 }

@@ -1,17 +1,17 @@
-import * as React from "react";
-import { Image, StyleSheet, View as DefaultView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch, useSelector } from "react-redux";
-import MyButton from "../components/MyButton";
-import { View } from "../components/themed/Themed";
-import MyText from "../components/MyText";
-import { resetNotificationToken } from "../features/user";
-import { registerForPushNotificationsAsync } from "../utils/registerForPushNotificationsAsync";
-import { updateUserNotificationToken } from "../utils/userOperations";
+import * as React from 'react';
+import { Image, StyleSheet, View as DefaultView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import MyButton from '../components/MyButton';
+import { ThemedView } from '../components/Themed';
+import MyText from '../components/MyText';
+import { resetNotificationToken } from '../features/user';
+import { registerForPushNotificationsAsync } from '../utils/registerForPushNotificationsAsync';
+import { updateUserNotificationToken } from '../utils/userOperations';
 
 export default function Onboarding() {
-  const { id } = useSelector((state) => state.user);
+  const { id } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -22,15 +22,15 @@ export default function Onboarding() {
         await updateUserNotificationToken(id, token);
         dispatch(resetNotificationToken(token));
       }
-      await AsyncStorage.setItem("@firstLaunch", "true");
-      navigation.navigate("Home");
+      await AsyncStorage.setItem('@firstLaunch', 'true');
+      navigation.navigate('Home');
     } catch (e) {
-      console.log("Onboarding error", e);
+      console.log('Onboarding error', e);
     }
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
+    <ThemedView style={{ flex: 1, justifyContent: 'center' }}>
       <MyText style={styles.title} type="title">
         Welcome to
       </MyText>
@@ -38,28 +38,28 @@ export default function Onboarding() {
         Only Chats
       </MyText>
       {appFeatures.map((feature, index) => (
-        <View key={index} style={styles.itemContainer}>
+        <ThemedView key={index} style={styles.itemContainer}>
           <Image source={feature.icon} style={styles.icon} />
           <DefaultView style={styles.textWrapper}>
-            <MyText type="caption" style={{ fontWeight: "bold" }}>
+            <MyText type="caption" style={{ fontWeight: 'bold' }}>
               {feature.title}
             </MyText>
             <MyText type="caption">{feature.description}</MyText>
           </DefaultView>
-        </View>
+        </ThemedView>
       ))}
       <MyButton
         style={{ marginTop: 50 }}
         title="Continue"
         onPress={handleOnContinue}
       />
-    </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   title: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   icon: {
     width: 58,
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     marginRight: 13,
   },
   itemContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginVertical: 13,
   },
   textWrapper: {
@@ -78,20 +78,20 @@ const styles = StyleSheet.create({
 
 const appFeatures = [
   {
-    icon: require("../../assets/post.png"),
-    title: "Creating Post",
-    description: "Create post and share ideas with members of the community",
+    icon: require('../../assets/post.png'),
+    title: 'Creating Post',
+    description: 'Create post and share ideas with members of the community',
   },
   {
-    icon: require("../../assets/message.png"),
-    title: "Create chats with friends",
+    icon: require('../../assets/message.png'),
+    title: 'Create chats with friends',
     description:
-      "Start a conversation with friends, send messages at the speed of light",
+      'Start a conversation with friends, send messages at the speed of light',
   },
   {
-    icon: require("../../assets/bell.png"),
-    title: "Keep updated with notifications",
+    icon: require('../../assets/bell.png'),
+    title: 'Keep updated with notifications',
     description:
-      "Get notified whenever someone likes your posts or sends you a message",
+      'Get notified whenever someone likes your posts or sends you a message',
   },
 ];

@@ -11,6 +11,7 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { notificationAsync, NotificationFeedbackType } from 'expo-haptics';
+import { object } from 'prop-types';
 import Colors from '../../constants/colors';
 import {
   incrementLikesReducer,
@@ -28,8 +29,9 @@ import {
   sendPushNotification,
 } from '../utils/notifications';
 
-export default function PostCard(post) {
+export default function PostCard({ post }) {
   const user = useSelector(state => state.user);
+
   const theme = useColorScheme();
   const dispatch = useDispatch();
   const { author, content, createdAt, id, likedBy, numberOfLikes } = post;
@@ -71,7 +73,6 @@ export default function PostCard(post) {
       return Alert.alert('Report Post', 'Would you like to report this post?', [
         {
           text: 'Cancel',
-          onPress: () => console.log('canceled'),
           style: 'cancel',
         },
         {
@@ -91,7 +92,6 @@ export default function PostCard(post) {
     return Alert.alert('Delete Post', 'Would you like to delete this post?', [
       {
         text: 'Cancel',
-        onPress: () => console.log('canceled'),
         style: 'cancel',
       },
       {
@@ -180,6 +180,10 @@ export default function PostCard(post) {
     </View>
   );
 }
+
+PostCard.propTypes = {
+  post: object,
+};
 
 const styles = StyleSheet.create({
   container: {

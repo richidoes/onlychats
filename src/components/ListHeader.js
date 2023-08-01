@@ -1,8 +1,9 @@
-import * as React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import MyText from "./MyText";
-import Colors from "../../constants/colors";
+import * as React from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { func, string } from 'prop-types';
+import MyText from './MyText';
+import Colors from '../../constants/colors';
 
 export default function ListHeader({ title, iconName, handleNavigation }) {
   return (
@@ -20,11 +21,17 @@ export default function ListHeader({ title, iconName, handleNavigation }) {
   );
 }
 
+ListHeader.propTypes = {
+  title: string,
+  iconName: string,
+  handleNavigation: func,
+};
+
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 17,
     marginVertical: 23,
   },

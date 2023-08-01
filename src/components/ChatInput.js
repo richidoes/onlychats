@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
+import { string } from 'prop-types';
 import Colors from '../../constants/colors';
 import { createMessage, updateChatRoom } from '../graphql/mutations';
 
@@ -37,11 +38,11 @@ export default function ChatInput({ chatRoomId, contactToken }) {
           },
         })
       );
-      console.log('message sent and chatRoom updated');
       setText('');
       await sendPushNotification();
     } catch (e) {
-      console.log(e);
+      alert('Error sending message');
+      console.log('Error sending message', e);
     }
   }
 
@@ -108,6 +109,11 @@ export default function ChatInput({ chatRoomId, contactToken }) {
     </View>
   );
 }
+
+ChatInput.propTypes = {
+  chatRoomId: string,
+  contactToken: string,
+};
 
 const styles = StyleSheet.create({
   textInputBar: {

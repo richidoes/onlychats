@@ -1,28 +1,28 @@
-import * as React from "react";
-import { Alert, StyleSheet } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
-import { View } from "../components/themed/Themed";
-import MyText from "../components/MyText";
-import MyInput from "../components/MyInput";
-import MyButton from "../components/MyButton";
-import { setChatRooms } from "../features/chatRooms";
+import * as React from 'react';
+import { Alert, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { ThemedView } from '../components/Themed';
+import MyText from '../components/MyText';
+import MyInput from '../components/MyInput';
+import MyButton from '../components/MyButton';
+import { setChatRooms } from '../features/chatRooms';
 import {
   getUserByEmail,
   addUserToChatRoom,
   createNewChatRoom,
   getUserByID,
-} from "../utils/userOperations";
+} from '../utils/userOperations';
 import {
   sendPushNotification,
   createNotificationOnDB,
-} from "../utils/notifications";
+} from '../utils/notifications';
 
 export default function NewChat() {
-  const user = useSelector((state) => state.user);
+  const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [email, setEmail] = React.useState("");
+  const [email, setEmail] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
 
   // search for user by email
@@ -63,35 +63,33 @@ export default function NewChat() {
       const notificationData = await createNotificationOnDB(
         user.id,
         contact.id,
-        "STARTED_CONVERSATION",
-        "",
+        'STARTED_CONVERSATION',
+        '',
         newChatRoomID
       );
       await sendPushNotification(
         contact.notificationToken,
-        "🚨 New conversation started!",
-        `${
-          `${user.firstName  } ${  user.lastName}`
-        } started a conversation with you`,
+        '🚨 New conversation started!',
+        `${`${user.firstName} ${user.lastName}`} started a conversation with you`,
         notificationData
       );
       setIsLoading(false);
-      Alert.alert("Success!", "Conversation started successfully", [
+      Alert.alert('Success!', 'Conversation started successfully', [
         {
           text: "Let's chat!",
           onPress: () => navigation.goBack(),
-          style: "default",
+          style: 'default',
         },
       ]);
     } catch (e) {
-      alert("something went wrong");
+      alert('something went wrong');
       setIsLoading(false);
     }
   }
 
   return (
-    <View style={styles.container}>
-      <MyText style={{ fontWeight: "bold", marginBottom: 11 }}>
+    <ThemedView style={styles.container}>
+      <MyText style={{ fontWeight: 'bold', marginBottom: 11 }}>
         Start a new chat by entering the email of the user you want to chat with
       </MyText>
       <MyInput
@@ -101,11 +99,11 @@ export default function NewChat() {
         value={email}
       />
       <MyButton
-        title={isLoading ? "Loading..." : "Start new chat"}
+        title={isLoading ? 'Loading...' : 'Start new chat'}
         onPress={handleNewChat}
         disabled={isLoading}
       />
-    </View>
+    </ThemedView>
   );
 }
 

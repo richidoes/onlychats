@@ -1,9 +1,8 @@
-import * as React from "react";
-import { Button } from "react-native";
-import MyInput from "./MyInput";
-import MyButton from "./MyButton";
-import MyText from "./MyText";
-import { AuthContext } from "../Context/AuthContext";
+import * as React from 'react';
+import MyInput from './MyInput';
+import MyButton from './MyButton';
+import MyText from './MyText';
+import { AuthContext } from '../Context/AuthContext';
 
 export default function SignUp() {
   const {
@@ -33,7 +32,7 @@ export default function SignUp() {
       <MyButton
         title="Go Back"
         type="secondary"
-        onPress={() => setAuthState("signIn")}
+        onPress={() => setAuthState('signIn')}
       />
     </>
   );

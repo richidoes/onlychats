@@ -1,25 +1,25 @@
-import * as React from "react";
-import { Auth, API, graphqlOperation } from "aws-amplify";
-import { useDispatch } from "react-redux";
-import { createUser } from "../graphql/mutations";
-import { setUser } from "../features/user";
-import { getUser } from "../graphql/queries";
-import { setChatRooms } from "../features/chatRooms";
+import * as React from 'react';
+import { Auth, API, graphqlOperation } from 'aws-amplify';
+import { useDispatch } from 'react-redux';
+import { createUser } from '../graphql/mutations';
+import { setUser } from '../features/user';
+import { getUser } from '../graphql/queries';
+import { setChatRooms } from '../features/chatRooms';
 
 const AuthContext = React.createContext({
-  authState: "default",
+  authState: 'default',
   setAuthState: () => {},
-  email: "",
+  email: '',
   setEmail: () => {},
-  password: "",
+  password: '',
   setPassword: () => {},
-  verificationCode: "",
+  verificationCode: '',
   setVerificationCode: () => {},
   isLoading: false,
-  firstName: "",
+  firstName: '',
   setLastName: () => {},
-  lastName: "",
-  confirmPassword: "",
+  lastName: '',
+  confirmPassword: '',
   setConfirmPassword: () => {},
   setFirstName: () => {},
   handleSignIn: () => {},
@@ -33,19 +33,19 @@ const AuthContext = React.createContext({
 const { Provider } = AuthContext;
 
 function AuthProvider({ children }) {
-  const [authState, setAuthState] = React.useState("default");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [verificationCode, setVerificationCode] = React.useState("");
+  const [authState, setAuthState] = React.useState('default');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [verificationCode, setVerificationCode] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
   const dispatch = useDispatch();
 
   async function handleSignIn() {
     if (!email || !password) {
-      alert("please enter an email and password");
+      alert('please enter an email and password');
       return;
     }
     try {
@@ -74,22 +74,20 @@ function AuthProvider({ children }) {
         dispatch(setChatRooms(userFromDB.data.getUser.chatRooms.items));
       }
       setIsLoading(false);
-      console.log("user signed In");
-      setAuthState("signedIn");
+      setAuthState('signedIn');
     } catch (e) {
-      alert(e.message);
       setIsLoading(false);
-      console.log(e);
+      console.log(e.message);
     }
   }
 
   async function handleSignUp() {
     if (!email || !password) {
-      alert("Please enter an email and password");
+      alert('Please enter an email and password');
       return;
     }
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert('Passwords do not match');
       return;
     }
     try {
@@ -102,7 +100,7 @@ function AuthProvider({ children }) {
           family_name: lastName,
         },
       });
-      setAuthState("confirmSignUp");
+      setAuthState('confirmSignUp');
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -113,7 +111,7 @@ function AuthProvider({ children }) {
 
   async function handleConfirmSignUp() {
     if (!verificationCode) {
-      alert("Please enter verification code");
+      alert('Please enter verification code');
       return;
     }
     try {
@@ -124,7 +122,7 @@ function AuthProvider({ children }) {
         password,
       });
       await saveUserToDatabase(user);
-      alert("Welcome, account created succesfully");
+      alert('Welcome, account created succesfully');
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -135,13 +133,13 @@ function AuthProvider({ children }) {
 
   async function handleForgotPassword() {
     if (!email) {
-      alert("Please enter an email");
+      alert('Please enter an email');
       return;
     }
     try {
       setIsLoading(true);
       await Auth.forgotPassword(email);
-      setAuthState("confirmForgotPassword");
+      setAuthState('confirmForgotPassword');
       setIsLoading(false);
     } catch (e) {
       alert(e.message);
@@ -151,18 +149,18 @@ function AuthProvider({ children }) {
 
   async function handleResetPassword() {
     if (!verificationCode || verificationCode.length !== 6) {
-      alert("Please enter a valid verification code");
+      alert('Please enter a valid verification code');
       return;
     }
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert('Passwords do not match');
       return;
     }
     try {
       setIsLoading(true);
       await Auth.forgotPasswordSubmit(email, verificationCode, password);
-      alert("Password reset successfully, Now you can Sign In");
-      setAuthState("signIn");
+      alert('Password reset successfully, Now you can Sign In');
+      setAuthState('signIn');
       setIsLoading(false);
     } catch (e) {
       alert(e.message);
@@ -193,15 +191,16 @@ function AuthProvider({ children }) {
       longitude: null,
     };
     try {
-      const userFromDB = await API.graphql(
+      // Create user in DB
+      await API.graphql(
         graphqlOperation(createUser, {
           input: userToSave,
         })
       );
+      // Save user to redux
       dispatch(setUser(userToSave));
-      console.log("user saved to DB and Redux", userFromDB);
     } catch (e) {
-      console.log("error saving user", e);
+      console.log('Error creating user', e);
     }
   }
   return (

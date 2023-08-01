@@ -1,13 +1,13 @@
-import * as React from "react";
-import { Auth, API, graphqlOperation } from "aws-amplify";
-import { useDispatch } from "react-redux";
-import { View } from "../components/themed/Themed";
-import MyText from "../components/MyText";
-import { setUser } from "../features/user";
-import { setChatRooms } from "../features/chatRooms";
-import { getUser } from "../graphql/queries";
-import { getNotificationsByUserID } from "../utils/notifications";
-import { setNotifications } from "../features/notifications";
+import * as React from 'react';
+import { Auth, API, graphqlOperation } from 'aws-amplify';
+import { useDispatch } from 'react-redux';
+import { ThemedView } from '../components/Themed';
+import MyText from '../components/MyText';
+import { setUser } from '../features/user';
+import { setChatRooms } from '../features/chatRooms';
+import { getUser } from '../graphql/queries';
+import { getNotificationsByUserID } from '../utils/notifications';
+import { setNotifications } from '../features/notifications';
 
 export default function Splash({ setIsLoading }) {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export default function Splash({ setIsLoading }) {
           attributes.sub
         );
         if (notificationsList) dispatch(setNotifications(notificationsList));
-        // console.log(data);
+
         dispatch(
           setUser({
             id: attributes.sub,
@@ -49,9 +49,11 @@ export default function Splash({ setIsLoading }) {
   }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <ThemedView
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+    >
       <MyText type="title">🕰</MyText>
       <MyText type="title">Loading...</MyText>
-    </View>
+    </ThemedView>
   );
 }

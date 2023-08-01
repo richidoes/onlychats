@@ -1,11 +1,12 @@
-import * as React from "react";
-import { useColorScheme, View as DefaultView } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Colors from "../../../constants/colors";
+import * as React from 'react';
+import { useColorScheme, View as DefaultView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { object } from 'prop-types';
+import Colors from '../../constants/colors';
 
-export function View(props) {
+export function ThemedView({ style, ...otherProps }) {
   const theme = useColorScheme();
-  const { style, ...otherProps } = props;
+
   return (
     <DefaultView
       style={[
@@ -17,9 +18,13 @@ export function View(props) {
   );
 }
 
-export function ScrollView(props) {
+ThemedView.propTypes = {
+  style: object,
+};
+
+export function ThemedScrollView({ style, children, ...otherProps }) {
   const theme = useColorScheme();
-  const { style, children, ...otherProps } = props;
+
   return (
     <KeyboardAwareScrollView
       style={[
@@ -32,3 +37,7 @@ export function ScrollView(props) {
     </KeyboardAwareScrollView>
   );
 }
+
+ThemedScrollView.propTypes = {
+  style: object,
+};

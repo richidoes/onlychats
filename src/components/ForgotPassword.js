@@ -1,8 +1,8 @@
-import * as React from "react";
-import MyInput from "./MyInput";
-import MyButton from "./MyButton";
-import MyText from "./MyText";
-import { AuthContext } from "../Context/AuthContext";
+import * as React from 'react';
+import MyInput from './MyInput';
+import MyButton from './MyButton';
+import MyText from './MyText';
+import { AuthContext } from '../Context/AuthContext';
 
 export default function ForgotPassword() {
   const { setAuthState, setEmail, isLoading, handleForgotPassword } =
@@ -14,12 +14,12 @@ export default function ForgotPassword() {
         Forgot Password
       </MyText>
       <MyText type="caption" style={{ marginBottom: 15 }}>
-        Enter your email address and we'll send you a code to reset your
+        Enter your email address and we&apos;ll send you a code to reset your
         password.
       </MyText>
       <MyInput label="Email" onChangeText={setEmail} />
       <MyButton
-        title={isLoading ? "Sending Code..." : "Send Code"}
+        title={isLoading ? 'Sending Code...' : 'Send Code'}
         disabled={!!isLoading}
         style={{ marginTop: 20 }}
         onPress={handleForgotPassword}
@@ -27,7 +27,7 @@ export default function ForgotPassword() {
       <MyButton
         type="secondary"
         title="Back to Login"
-        onPress={() => setAuthState("signIn")}
+        onPress={() => setAuthState('signIn')}
       />
     </>
   );
