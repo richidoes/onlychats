@@ -17,15 +17,17 @@ export default function NewPost() {
   const theme = useColorScheme();
   const charsRemaining = 300 - postContent.length;
 
+  const HeaderRightButton = React.useCallback(() => (
+    <Button
+      onPress={onPublish}
+      title={isLoading ? 'Publishing' : 'Publish'}
+      disabled={postContent.trim().length === 0 || isLoading}
+    />
+  ));
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <Button
-          onPress={onPublish}
-          title={isLoading ? 'Publishing' : 'Publish'}
-          disabled={postContent.trim().length === 0 || isLoading}
-        />
-      ),
+      headerRight: HeaderRightButton,
     });
   }, [postContent, isLoading]);
 
@@ -39,7 +41,7 @@ export default function NewPost() {
       navigation.navigate('Home');
     } catch (e) {
       setIsLoading(false);
-      console.log(e, 'error publishing post');
+      console.log('Error publishing post: ', e);
     }
   }
 
@@ -68,7 +70,7 @@ export default function NewPost() {
             : null,
         ]}
       >
-        {charsRemaining} Characteres remaining
+        {charsRemaining} Characters remaining
       </MyText>
     </ThemedScrollView>
   );

@@ -11,7 +11,6 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/core';
 import { useSelector, useDispatch } from 'react-redux';
-import MyText from '../components/MyText';
 import { messagesByChatRoom, getUser } from '../graphql/queries';
 import Colors from '../../constants/colors';
 import ChatRoomHeader from '../components/ChatRoomHeader';
@@ -33,6 +32,11 @@ export default function ChatRoom() {
   const [nextToken, setNextToken] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const CustomHeader = React.useCallback(
+    () => <ChatRoomHeader {...contactInfo} />,
+    []
+  );
+
   React.useEffect(() => {
     fetchMessages();
   }, []);
@@ -41,17 +45,17 @@ export default function ChatRoom() {
     API.graphql(
       graphqlOperation(onCreateMessage, { chatRoomID: chatRoomId })
     ).subscribe({
-      next: ({ provider, value }) => {
+      next: () => {
         fetchMessages();
         fetchUser();
       },
-      error: e => console.log(e),
+      error: e => console.log('onCreateMessage subscription error', e),
     });
   }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <ChatRoomHeader {...contactInfo} />,
+      headerTitle: CustomHeader,
     });
   }, []);
 
@@ -70,7 +74,8 @@ export default function ChatRoom() {
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
-      console.log;
+      alert('Error loading messages');
+      console.log('Error loading messages', e);
     }
   }
 
@@ -94,7 +99,8 @@ export default function ChatRoom() {
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
-      console.log(e);
+      alert('Error loading more messages');
+      console.log('Error loading more messages', e);
     }
   }
 

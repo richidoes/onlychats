@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import moment from 'moment';
+import { bool, func, string } from 'prop-types';
 import { getUser } from '../graphql/queries';
 import { ThemedScrollView } from '../components/Themed';
 import Colors from '../../constants/colors';
@@ -38,7 +39,6 @@ export default function ContactProfile() {
     Alert.alert('Report User', 'Would you like to report this user?', [
       {
         text: 'Cancel',
-        onPress: () => console.log('canceled'),
         style: 'cancel',
       },
       {
@@ -60,17 +60,17 @@ export default function ContactProfile() {
     alert('Thank you for your report. We will review it as soon as possible.');
   };
 
-  if (contact === undefined || contact === null) return;
+  if (contact === undefined || contact === null) return null;
 
   return (
     <ThemedScrollView contentContainerStyle={styles.container}>
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: isNaN(parseFloat(contact.latitude))
+          latitude: Number.isNaN(parseFloat(contact.latitude))
             ? 37.78825
             : parseFloat(contact.latitude),
-          longitude: isNaN(parseFloat(contact.longitude))
+          longitude: Number.isNaN(parseFloat(contact.longitude))
             ? -122.4324
             : parseFloat(contact.longitude),
           latitudeDelta: 1,
@@ -79,10 +79,10 @@ export default function ContactProfile() {
       >
         <Marker
           coordinate={{
-            latitude: isNaN(parseFloat(contact.latitude))
+            latitude: Number.isNaN(parseFloat(contact.latitude))
               ? 37.78825
               : parseFloat(contact.latitude),
-            longitude: isNaN(parseFloat(contact.longitude))
+            longitude: Number.isNaN(parseFloat(contact.longitude))
               ? -122.4324
               : parseFloat(contact.longitude),
           }}
@@ -185,6 +185,14 @@ function InfoField({ label, value, onPress, theme, danger }) {
     </Pressable>
   );
 }
+
+InfoField.propTypes = {
+  label: string,
+  value: string,
+  onPress: func,
+  theme: string,
+  danger: bool,
+};
 
 const styles = StyleSheet.create({
   container: {

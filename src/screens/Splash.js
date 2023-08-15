@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import { useDispatch } from 'react-redux';
+import { func } from 'prop-types';
 import { ThemedView } from '../components/Themed';
 import MyText from '../components/MyText';
 import { setUser } from '../features/user';
@@ -40,13 +41,16 @@ export default function Splash({ setIsLoading }) {
           dispatch(setChatRooms(data.getUser.chatRooms.items));
         }
         setIsLoading(false);
-        // console.log(attributes);
       } catch (e) {
-        console.log(e);
+        console.log('Error loading user data', e);
         setIsLoading(false);
       }
     })();
   }, []);
+
+  Splash.propTypes = {
+    setIsLoading: func,
+  };
 
   return (
     <ThemedView

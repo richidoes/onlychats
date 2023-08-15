@@ -9,7 +9,6 @@ import {
   setNotifications,
 } from '../features/notifications';
 import { getNotificationsByUserID } from '../utils/notifications';
-import MyText from '../components/MyText';
 import NotificationCard from '../components/NotificationCard';
 
 export default function NotificationsScreen() {
@@ -32,7 +31,7 @@ export default function NotificationsScreen() {
       dispatch(setNotifications(notificationsList));
       setIsLoading(false);
     } catch (e) {
-      console.log(e);
+      console.log('Error loading notifications', e);
       setIsLoading(false);
     }
   }
@@ -50,12 +49,24 @@ export default function NotificationsScreen() {
         dispatch(loadMoreNotifications(notificationsList));
         setIsLoading(false);
       } catch (e) {
-        console.log;
+        console.log('Error loading more notifications', e);
       }
     } else {
       setIsLoading(false);
     }
   }
+
+  const NotificationsListHeader = React.useCallback(() => (
+    <ListHeader title="Notifications" />
+  ));
+
+  const NotificationsListFooter = React.useCallback(() => (
+    <Button
+      onPress={fetchMoreNotifications}
+      title={isLoading ? 'loading' : 'load more notifications'}
+      disabled={isLoading || nextToken === null}
+    />
+  ));
 
   return (
     <ThemedView style={{ flex: 1, paddingHorizontal: 0 }}>
@@ -64,14 +75,8 @@ export default function NotificationsScreen() {
         renderItem={({ item }) => <NotificationCard notification={item} />}
         contentContainerStyle={Platform.OS === 'ios' && { paddingVertical: 30 }}
         estimatedItemSize={200}
-        ListHeaderComponent={() => <ListHeader title="Notifications" />}
-        ListFooterComponent={() => (
-          <Button
-            onPress={fetchMoreNotifications}
-            title={isLoading ? 'loading' : 'load more notifications'}
-            disabled={isLoading || nextToken === null}
-          />
-        )}
+        ListHeaderComponent={NotificationsListHeader}
+        ListFooterComponent={NotificationsListFooter}
         refreshing={isLoading}
         onRefresh={fetchNotifications}
       />

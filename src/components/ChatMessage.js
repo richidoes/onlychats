@@ -33,7 +33,7 @@ export default function ChatMessage({ message }) {
               : [`${Colors[theme].text}10`, `${Colors[theme].text}10`]
           }
         >
-          <MyText style={myMessage && { color: '#fff' }}>
+          <MyText style={myMessage ? { color: '#fff' } : {}}>
             {message.content}
           </MyText>
         </LinearGradient>

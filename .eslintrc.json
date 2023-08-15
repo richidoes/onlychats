@@ -26,7 +26,14 @@
     // ignore errors for the react-navigation package
     "react/prop-types": [
       "error",
-      { "ignore": ["navigation", "navigation.navigate", "children"] }
+      {
+        "ignore": [
+          "navigation",
+          "navigation.navigate",
+          "children",
+          "colorScheme"
+        ]
+      }
     ],
 
     "react-hooks/exhaustive-deps": 0,

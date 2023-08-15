@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API, graphqlOperation } from 'aws-amplify';
 import { FlashList } from '@shopify/flash-list';
-import { Button } from 'react-native';
+import { Button, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Notifications from 'expo-notifications';
 import { postsByDate } from '../graphql/queries';
@@ -11,7 +11,6 @@ import ListHeader from '../components/ListHeader';
 import PostCard from '../components/PostCard';
 import { setPostsReducer, loadMorePostReducer } from '../features/posts';
 import { ThemedView } from '../components/Themed';
-import MyText from '../components/MyText';
 
 export default function Home() {
   const navigation = useNavigation();
@@ -66,7 +65,6 @@ export default function Home() {
     dispatch(setPostsReducer(data.postsByDate.items));
     setNextToken(data.postsByDate.nextToken);
     setIsLoading(false);
-    // console.log(data.postsByDate.nextToken);
   }
 
   async function fetchMorePost() {
@@ -89,9 +87,23 @@ export default function Home() {
     } else {
       setIsLoading(false);
     }
-
-    // console.log(data.postsByDate.items);
   }
+
+  const PostsListHeader = React.useCallback(() => (
+    <ListHeader
+      title="Posts"
+      iconName="add-circle-sharp"
+      handleNavigation={() => navigation.navigate('NewPost')}
+    />
+  ));
+
+  const PostsListFooter = React.useCallback(() => (
+    <Button
+      onPress={fetchMorePost}
+      title={isLoading ? 'loading' : 'load more posts'}
+      disabled={isLoading || nextToken === null}
+    />
+  ));
 
   return (
     <ThemedView style={{ flex: 1, paddingHorizontal: 0 }}>
@@ -100,20 +112,8 @@ export default function Home() {
         renderItem={({ item }) => <PostCard post={item} />}
         contentContainerStyle={Platform.OS === 'ios' && { paddingVertical: 30 }}
         estimatedItemSize={200}
-        ListHeaderComponent={() => (
-          <ListHeader
-            title="Posts"
-            iconName="add-circle-sharp"
-            handleNavigation={() => navigation.navigate('NewPost')}
-          />
-        )}
-        ListFooterComponent={() => (
-          <Button
-            onPress={fetchMorePost}
-            title={isLoading ? 'loading' : 'load more posts'}
-            disabled={isLoading || nextToken === null}
-          />
-        )}
+        ListHeaderComponent={PostsListHeader}
+        ListFooterComponent={PostsListFooter}
         refreshing={isLoading}
         onRefresh={fetchPost}
       />

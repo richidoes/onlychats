@@ -18,24 +18,30 @@ export default function Chats() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const subscription = API.graphql(
-      graphqlOperation(onCreateChatRoom)
-    ).subscribe({
-      next: ({ provider, value }) => {
+    API.graphql(graphqlOperation(onCreateChatRoom)).subscribe({
+      next: () => {
         setTimeout(() => {
           handleNewChat();
         }, 2000);
       },
-      error: error => console.warn(error),
+      error: error => console.log('onCreateChatRoom subscription error', error),
     });
   }, []);
 
-  async function handleNewChat() {
+  const handleNewChat = async () => {
     const userInfo = await getUserByID(user.id);
     if (userInfo.chatRooms !== undefined) {
       dispatch(setChatRooms(userInfo.chatRooms.items));
     }
-  }
+  };
+
+  const ChatsListHeader = React.useCallback(() => (
+    <ListHeader
+      title="Chats"
+      iconName="add-circle-sharp"
+      handleNavigation={() => navigation.navigate('NewChat')}
+    />
+  ));
 
   return (
     <ThemedView style={{ flex: 1, paddingHorizontal: 0 }}>
@@ -44,13 +50,7 @@ export default function Chats() {
         renderItem={({ item }) => <ChatRoomCard chat={item} />}
         contentContainerStyle={Platform.OS === 'ios' && { paddingVertical: 30 }}
         estimatedItemSize={200}
-        ListHeaderComponent={() => (
-          <ListHeader
-            title="Chats"
-            iconName="add-circle-sharp"
-            handleNavigation={() => navigation.navigate('NewChat')}
-          />
-        )}
+        ListHeaderComponent={ChatsListHeader}
       />
     </ThemedView>
   );

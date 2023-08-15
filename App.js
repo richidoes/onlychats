@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useColorScheme } from 'react-native';
+import { LogBox, useColorScheme } from 'react-native';
 import { Amplify, Hub, API, graphqlOperation } from 'aws-amplify';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { setNotificationHandler } from 'expo-notifications';
@@ -10,6 +10,10 @@ import AuthScreen from './src/screens/Auth';
 import { setUser, resetUser } from './src/features/user';
 import { store } from './src/app/store';
 import { getUser } from './src/graphql/queries';
+
+LogBox.ignoreLogs([
+  'Invalid prop `style` supplied to `MyText`, expected one of type [object, object].',
+]);
 
 setNotificationHandler({
   handleNotification: async () => ({

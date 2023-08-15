@@ -37,8 +37,8 @@ export default function Onboarding() {
       <MyText style={[styles.title, { marginBottom: 30 }]} type="title">
         Only Chats
       </MyText>
-      {appFeatures.map((feature, index) => (
-        <ThemedView key={index} style={styles.itemContainer}>
+      {appFeatures.map(feature => (
+        <ThemedView key={feature.title} style={styles.itemContainer}>
           <Image source={feature.icon} style={styles.icon} />
           <DefaultView style={styles.textWrapper}>
             <MyText type="caption" style={{ fontWeight: 'bold' }}>
