@@ -1,6 +1,6 @@
-import { API, graphqlOperation } from "aws-amplify";
-import { createNotification } from "../graphql/mutations";
-import { notificationsByUserID } from "../graphql/queries";
+import { API, graphqlOperation } from 'aws-amplify';
+import { createNotification } from '../graphql/mutations';
+import { notificationsByUserID } from '../graphql/queries';
 
 export async function createNotificationOnDB(
   senderID,
@@ -17,21 +17,21 @@ export async function createNotificationOnDB(
           notificationSenderId: senderID,
           receiver: receiverID,
           type,
-          postID: postID ?? "",
-          chatRoomID: chatRoomID ?? "",
+          postID: postID ?? '',
+          chatRoomID: chatRoomID ?? '',
           isSeen: false,
         },
       },
     });
-    console.log("notification created!");
+
     if (data.createNotification) {
       return data.createNotification;
-    } 
-      return null;
-    
+    }
   } catch (e) {
-    console.log(e);
+    console.log('Error creating notification on DB: ', e);
   }
+
+  return null;
 }
 
 export async function getNotificationsByUserID(userID, nextToken) {
@@ -40,39 +40,44 @@ export async function getNotificationsByUserID(userID, nextToken) {
       graphqlOperation(notificationsByUserID, {
         receiver: userID,
         limit: 100,
-        sortDirection: "DESC",
+        sortDirection: 'DESC',
         nextToken: nextToken ?? null,
       })
     );
+
     return {
       nextTokenUtil: data.notificationsByUserID.nextToken ?? null,
       notificationsList: data.notificationsByUserID.items ?? null,
     };
   } catch (e) {
-    console.log(e);
+    console.log('Error getting notification by user: ', e);
   }
+
+  return {
+    nextTokenUtil: null,
+    notificationsList: null,
+  };
 }
 
 export async function sendPushNotification(token, title, body, data, category) {
   if (token !== null) {
     const message = {
       to: token,
-      sound: "default",
+      sound: 'default',
       title,
       body,
       data: data ?? {},
     };
 
-    await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(message),
-      categoryIdentifier: category ?? "",
+      categoryIdentifier: category ?? '',
     });
   }
-  
 }

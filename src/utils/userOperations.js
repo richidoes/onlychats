@@ -18,9 +18,8 @@ export const updateUserPicture = async (userID, newPhoto) => {
         },
       },
     });
-    console.log('profile picture updated');
   } catch (e) {
-    console.log('error updating user photo');
+    console.log('Error updating user photo: ', e);
   }
 };
 
@@ -35,9 +34,8 @@ export const updateUserStatus = async (userID, newStatus) => {
         },
       },
     });
-    console.log('user status updated');
   } catch (e) {
-    console.log('error updating user status');
+    console.log('Error updating user status: ', e);
   }
 };
 
@@ -52,9 +50,8 @@ export const updateUserFirstName = async (userID, newFirstName) => {
         },
       },
     });
-    console.log('user firstName updated');
   } catch (e) {
-    console.log('error updating user firstName');
+    console.log('Error updating user firstName: ', e);
   }
 };
 
@@ -69,9 +66,8 @@ export const updateUserLastName = async (userID, newLastName) => {
         },
       },
     });
-    console.log('user lastName updated');
   } catch (e) {
-    console.log('error updating user lastName');
+    console.log('Error updating user lastName: ', e);
   }
 };
 
@@ -86,9 +82,8 @@ export const updateUserNotificationToken = async (userID, token) => {
         },
       },
     });
-    console.log('user push notification token updated');
   } catch (e) {
-    console.log('error updating user push notification token');
+    console.log('Error updating user push notification token: ', e);
   }
 };
 
@@ -105,9 +100,8 @@ export const updateUserLocation = async (userID, location) => {
         },
       },
     });
-    console.log('user location updated');
   } catch (e) {
-    console.log('error updating user location');
+    console.log('Error updating user location: ', e);
   }
 };
 
@@ -121,9 +115,8 @@ export const deleteUser = async userID => {
         },
       },
     });
-    console.log('user deleted successfully');
   } catch (e) {
-    console.log('error deleting user');
+    console.log('Error deleting user: ', e);
   }
 };
 
@@ -137,10 +130,11 @@ export const getUserByID = async ID => {
     if (data.getUser) {
       return data.getUser;
     }
-    return null;
   } catch (e) {
-    console.log(e);
+    console.log('Error getting user by ID: ', e);
   }
+
+  return null;
 };
 
 export const getUserByEmail = async email => {
@@ -155,13 +149,15 @@ export const getUserByEmail = async email => {
         },
       },
     });
+
     if (data.listUsers.items) {
       return data.listUsers.items[0];
     }
-    return null;
   } catch (e) {
-    console.log(e);
+    console.log('Error getting user by Email: ', e);
   }
+
+  return null;
 };
 
 export const createNewChatRoom = async () => {
@@ -175,13 +171,15 @@ export const createNewChatRoom = async () => {
         },
       },
     });
+
     if (data.createChatRoom) {
       return data.createChatRoom.id;
     }
-    return null;
   } catch (e) {
-    console.log(e);
+    console.log('Error creating new chatRoom: ', e);
   }
+
+  return null;
 };
 
 export const addUserToChatRoom = async (userId, chatRoomId) => {
@@ -196,6 +194,6 @@ export const addUserToChatRoom = async (userId, chatRoomId) => {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.log('Error adding user to chatRoom: ', e);
   }
 };
