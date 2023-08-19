@@ -22,7 +22,8 @@ amplifytools.xcconfig
 node_modules/
 .env
 
-amplify/
+amplify/team-provider-info.json
+amplify/backend/awscloudformation
 
 .expo/
 dist/
